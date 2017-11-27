@@ -1,0 +1,338 @@
+<!-- Message Section -->
+<section
+  id="message"
+  ng-if="contacts_ctrl.show_messages"
+  ng-cloak
+>
+  <div class="message-box">
+
+    <div class="message-header">
+      <h3>Aviso</h3>
+      <div class="btn-close">
+        <img
+          src="assets/images/window_ico_close.png"
+          alt="Fechar"
+          ng-click="contacts_ctrl.show_messages = false;"
+        >
+      </div>
+    </div>
+    <!-- /.message-header -->
+
+    <div class="message-content">
+      <p ng-if="contacts_ctrl.autobahn_is_connected === undefined">
+        <span>Conectando-se ao RedT PBX.</span>
+      </p>
+      <p ng-if="contacts_ctrl.autobahn_is_connected === false">
+        <span>Sem conexão ao RedT PBX!</span>
+      </p>
+      <p ng-if="login_ctrl.update_status">
+        <span>{{ login_ctrl.update_status }}</span>
+      </p>
+    </div>
+    <!-- /.message-content -->
+
+    <div
+      class="btn btn-ok bgcolor-1"
+      ng-click="contacts_ctrl.show_messages = false;"
+    >OK</div>
+
+  </div>
+</section>
+
+
+
+
+<!-- Header Section -->
+<section id="header-section">
+  <div class="container">
+
+    <div class="relative-wrapper">
+
+      <div class="logo">
+        <img
+          src="assets/images/incall_logo_square.png"
+          class="logo-incall-square"
+        >
+      </div>
+
+      <div class="block-2">
+
+        <div class="ico-id" ng-dblclick="login_ctrl.open_dev_tools()">
+          <img src="assets/images/header-ico-id.png" alt="">
+        </div>
+
+        <div class="extension">
+          <div
+            class="ext-title"
+            ng-if="( login_ctrl.peers.length <= 1 )"
+          >Ramal</div>
+          <div
+            class="ext-title"
+            ng-if="( login_ctrl.peers.length > 1 )"
+          >Ramais</div>
+          <div
+            ng-class="{
+              'multiples': ( login_ctrl.peers.length > 1 )
+            }"
+            class="ext-number color-1"
+          >
+            <span ng-repeat="peer in login_ctrl.peers">
+              {{ peer }}
+            </span>
+          </div>
+          <div class="ext-user color-1">
+            <span class="user-name">
+              {{ login_ctrl.name }}
+            </span>
+          </div>
+        </div>
+
+        <div class="actions-top">
+          <button
+            class="btn btn-exit bgcolor-1"
+            ng-click="login_ctrl.logout()"
+          >Sair</button>
+          <button
+            class="btn btn-exit bgcolor-1"
+            ng-click="login_ctrl.change_password()"
+          >Trocar senha</button>
+          <button class="btn btn-exit alert-icon">
+            <img
+              src="assets/images/alert-icon.png"
+              ng-click="contacts_ctrl.show_messages = true;"
+              ng-if="(
+                ( contacts_ctrl.autobahn_is_connected === undefined ) ||
+                ( contacts_ctrl.autobahn_is_connected === false ) ||
+                ( login_ctrl.update_status )
+              )"
+              ng-cloak
+            >
+          </button>
+        </div>
+
+      </div>
+      <!-- /.block-2 -->
+
+      <div class="block-3">
+        <div
+          class="contacts-block-3"
+          ng-if="contacts_ctrl.current_state.name == 'contacts'"
+        >
+          <div
+              ng-class="{
+              'active': contacts_ctrl.public_filter_class == 'p'
+            }"
+              class="btnX btn-all"
+              ng-click="contacts_ctrl.public_filter('p');"
+          >Todas</div>
+
+          <div
+            ng-class="{
+              'active': contacts_ctrl.public_filter_class == 'public'
+            }"
+            class="btnX btn-public"
+            ng-click="contacts_ctrl.public_filter('public');"
+          >Pública</div>
+          <div
+            ng-class="{
+              'active': contacts_ctrl.public_filter_class == 'private'
+            }"
+            class="btnX btn-personal"
+            ng-click="contacts_ctrl.public_filter('private');"
+          >Particular</div>
+          <div
+            class="btn-addcontact color-1"
+            ng-click="contacts_ctrl.new_contact()"
+          >Adicionar Contato</div>
+        </div>
+
+        <div class="info-app">
+          <div class="info server-ip">
+            Servidor: <span class="color-1">{{ login_ctrl.host }}</span>
+          </div>
+          <div class="info version">
+            Versão: <span class="color-1">{{ login_ctrl.package.version }}</span>
+          </div>
+        </div>
+        <!-- /.info-back -->
+
+      </div>
+      <!-- /.block-3 -->
+
+    </div>
+    <!-- /.relative-wrapper -->
+
+  </div>
+  <!-- /.container -->
+</section>
+<!-- /#header-section  -->
+
+<section
+  id="call-section"
+  ng-class="{
+    'call': contacts_ctrl.object_size( contacts_ctrl.calls )
+  }"
+>
+  <div
+    class="container"
+    ng-if="contacts_ctrl.object_size( contacts_ctrl.calls )"
+    ng-repeat="call in contacts_ctrl.calls"
+  >
+
+    <div class="block-1 col">
+      <div class="l-box">
+        <h3>Chamada em Curso</h3>
+        <div class="phone-number"><span></span> {{ call.config.source }}</div>
+        <div class="phone-name">
+          {{ call.config.contact?call.config.contact:'Contato desconhecido' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="block-2 col">
+      <div class="l-box">
+        <h3>Transferir</h3>
+        <div class="transfer-number group">
+          <input
+            name="transfer"
+            type="text"
+            ng-model="contacts_ctrl.tranfer_input"
+            placeholder="Número p/ transferência"
+          >
+          <div
+            class="btn-transfer"
+            ng-click="contacts_ctrl.transfer(
+              contacts_ctrl.tranfer_input, call
+            )"
+          >Transferir Ligação</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-3 col" ng-if="false">
+      <div class="l-box">
+        <h3>Parking</h3>
+        <button
+          class="btn-park"
+          ng-click="contacts_ctrl.park( call.config.destination )"
+        >Estacionar Ligação</button>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container -->
+</section>
+<!-- /#call-section  -->
+
+<section
+  id="table-section"
+  class="table-section"
+  ng-class="{
+    'incall': contacts_ctrl.object_size( contacts_ctrl.calls )
+  }"
+>
+  <div class="container">
+
+    <div class="bar-title">
+      <h1>Contatos</h1>
+      <button
+        class="btn"
+        ng-click="login_ctrl.recent_calls()"
+      >Registro de chamadas</button>
+    </div>
+
+    <div
+      class="alert-missed-calls"
+      ng-if="login_ctrl.has_missed_calls"
+    >
+      <div class="relative">
+        <button
+          ng-click="login_ctrl.recent_calls()"
+        >Existem chamadas perdidas.</button>
+        <span
+          class="btn-close"
+          ng-click="login_ctrl.has_missed_calls = false;"
+        >
+          <img src="assets/images/alert-close.png">
+        </span>
+      </div>
+    </div>
+
+    <div class="scroll-wrapper call">
+      <table
+        datatable="ng"
+        dt-instance="contacts_ctrl.dtInstance"
+        dt-options="contacts_ctrl.dtOptions"
+        dt-column-defs="contacts_ctrl.dtColumnDefs"
+        class="row-border hover"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+      >
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Ramal</th>
+            <th>Empresa</th>
+            <th>Cidade/UF</th>
+            <th>Ações</th>
+            <th>Tipo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            ng-repeat="contact in contacts_ctrl.contacts
+              track by $index"
+          >
+            <td>{{ contact.Firstname + ' ' + contact.Lastname }}</td>
+            <td>
+              {{
+                ( contact.Countrycode ? '+' + contact.Countrycode : '+55' ) +
+                ' ' + contact.Areacode + ' ' + contact.Phonenumber
+              }}
+            </td>
+            <td>{{ contact.Extension }}</td>
+            <td>{{ contact.Company }}</td>
+            <td>
+              {{
+                (
+                  contact.City ? contact.City + (
+                    contact.Region ? '/' + contact.Region : ''
+                  ) : ''
+                )
+              }}
+            </td>
+            <td>
+<!--             <button
+                ng-click="contacts_ctrl.call_contact(
+                  contact.Countrycode,
+                  contact.Areacode,
+                  contact.Phonenumber
+                )"
+                class="btn btn-call"
+              ><span>Ligar</span></button>-->
+              <button
+                ng-click="contacts_ctrl.edit_contact( contact.ID )"
+                ng-if="contact.Type == 'private'"
+                class="btn btn-edit"
+              ><span>Editar</span></button>
+              <button
+                ng-click="contacts_ctrl.remove_contact( contact.ID )"
+                ng-if="contact.Type == 'private'"
+                class="btn btn-delete"
+              ><span>Excluir</span></button>
+            </td>
+            <td>
+              {{ contact.Type }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- /.scroll-wrapper -->
+
+  </div>
+  <!-- /.container -->
+</section>
+<!-- /#filter-section  -->

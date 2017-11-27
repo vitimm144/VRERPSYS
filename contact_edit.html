@@ -1,0 +1,216 @@
+<section id="edit-section" class="show">
+  <div class="container">
+
+    <div class="center-content">
+
+      <h2
+        ng-if="contact_edit_ctrl.current_state.name == 'contacts.new'"
+      >Adicionar Contato</h2>
+      <h2
+        ng-if="contact_edit_ctrl.current_state.name == 'contacts.edit'"
+      >Editar Contato</h2>
+
+      <div class="edit-box">
+        <div>
+          <span ng-repeat="error in contact_edit_ctrl.errors
+            track by $index"
+          >
+            {{ error }}
+          </span>
+        </div>
+        <div
+          class="btn-close"
+          ng-click="contact_edit_ctrl.form_cancel()"
+        ><img src="assets/images/window_ico_close.png"></div>
+        <form
+          name="contact_edit_ctrl.contact_edit_form"
+          ng-submit="contact_edit_ctrl.submit()"
+          novalidate
+        >
+          <div class="form-top group">
+            <div class="form-line">
+              <label>Nome</label>
+              <input
+                class="input-full"
+                id="contact-firstname"
+                name="contact_firstname"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.Firstname"
+                required
+              >
+              <div
+                id="contact_firstname_required_error"
+                class="error"
+                ng-show="(
+                  contact_edit_ctrl[
+                    'contact_edit_form'
+                  ].contact_firstname.$dirty ||
+                  contact_edit_ctrl[
+                    'contact_edit_form'
+                  ].$submitted ) &&
+                  contact_edit_ctrl[
+                    'contact_edit_form'
+                  ].contact_firstname.$error.required"
+                translate
+              >Campo obrigatório</div>
+            </div>
+
+            <div class="form-line">
+              <label>Sobrenome</label>
+              <input
+                class="input-full"
+                id="contact-lastname"
+                name="contact-lastname"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.Lastname"
+              >
+            </div>
+
+            <div class="form-line">
+              <label>Email</label>
+              <input
+                id="contact-email"
+                name="contact-email"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.Email"
+                class="input-full"
+              >
+            </div>
+
+            <div class="form-line">
+              <label>Telefone</label>
+              <input
+                id="contact-countrycode"
+                name="contact_countrycode"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.Countrycode"
+                class="input-phone-area"
+                placeholder="Cód.País"
+                value="+55"
+                required
+              >
+              <input
+                id="contact-areacode"
+                name="contact_areacode"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.Areacode"
+                class="input-phone-ddd"
+                placeholder="Cód.Área"
+                required
+              >
+              <input
+                id="contact-phone"
+                name="contact_phone"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.Phonenumber"
+                class="input-phone-number"
+                placeholder="Número"
+                required
+              >
+              <div
+                id="contact_firstname_required_error"
+                class="error"
+                ng-show="(
+                    contact_edit_ctrl[
+                      'contact_edit_form'
+                    ].contact_countrycode.$dirty ||
+                    contact_edit_ctrl[
+                      'contact_edit_form'
+                    ].contact_areacode.$dirty ||
+                    contact_edit_ctrl[
+                      'contact_edit_form'
+                    ].contact_phone.$dirty ||
+                    contact_edit_ctrl[
+                      'contact_edit_form'
+                    ].$submitted
+                  ) && (
+                    contact_edit_ctrl[
+                      'contact_edit_form'
+                    ].contact_countrycode.$error.required ||
+                    contact_edit_ctrl[
+                      'contact_edit_form'
+                    ].contact_areacode.$error.required ||
+                    contact_edit_ctrl[
+                      'contact_edit_form'
+                    ].contact_phone.$error.required
+                  )
+                "
+                translate
+              >Campos de telefone obrigatórios</div>
+            </div>
+
+            <div class="form-line">
+              <label>Ramal</label>
+              <input
+                id="contact-extension"
+                name="contact-extension"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.Extension"
+                class="input-full"
+              >
+            </div>
+
+            <div class="form-line">
+              <label>Empresa</label>
+              <input
+                id="contact-company"
+                name="contact-company"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.Company"
+                class="input-full"
+              >
+            </div>
+
+            <div class="form-line">
+              <label>Cidade</label>
+              <input
+                id="contact-city"
+                name="contact-city"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.City"
+                class="input-full"
+              >
+            </div>
+
+            <div class="form-line">
+              <label>Região</label>
+              <input
+                id="contact-region"
+                name="contact-region"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.Region"
+                class="input-full"
+              >
+            </div>
+
+            <div class="form-line group">
+              <button
+                class="btn btn-update"
+                ng-if="contact_edit_ctrl.current_state.name == 'contacts.new'"
+              >Adicionar</button>
+              <button
+                class="btn btn-update"
+                ng-if="contact_edit_ctrl.current_state.name == 'contacts.edit'"
+              >Salvar</button>
+            </div>
+
+          </div>
+          <!-- /.form-top -->
+        </form>
+
+      </div>
+      <!-- /.edit-box -->
+      <p
+        class="obs"
+        ng-if="contact_edit_ctrl.current_state.name == 'contacts.new'"
+      >
+        Obs: O contato adicionado só ficará disponível em sua Agenda Particular.
+      </p>
+
+    </div>
+    <!-- /.center-content -->
+
+  </div>
+  <!-- /.container -->
+</section>
+<!-- /#table-section  -->

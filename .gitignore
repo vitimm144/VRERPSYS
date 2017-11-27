@@ -1,0 +1,12 @@
+nbproject
+node_modules
+dist
+po/*.mo
+po/*.pot
+.tmp
+.sass-cache
+app/bower_components
+test-results.xml
+/bower_components/
+bower_components*
+.idea/

@@ -1,0 +1,30 @@
+{
+  "name": "vrerpsys",
+  "version": "0.0.0",
+  "authors": [
+    ""
+  ],
+  "main": "main.js",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node",
+    "yui"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularjs": "~1.6.4",
+    "angular-ui-router": "~0.4.2",
+    "lodash": "~4.17.4",
+    "angular-datatables": "angular1",
+    "ng-scrollbars": "~0.0.11"
+  }
+}

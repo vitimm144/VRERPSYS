@@ -1,0 +1,111 @@
+<!-- Login Section -->
+<section id="login-section">
+  <div class="container">
+
+    <div class="center-content">
+
+      <div class="logo">
+        <img src="assets/images/logo_400.png" class="logo-incall-square">
+      </div>
+      <!-- /.logo -->
+
+      <div class="login-box">
+        <div>
+          <span ng-repeat="error in login_ctrl.errors
+            track by $index"
+          >
+            {{ error }}
+          </span>
+        </div>
+        <form
+          ng-submit="login_ctrl.login()"
+          name="login_ctrl.login_form"
+          novalidate
+        >
+          <div class="form-top group">
+            <div class="user side">
+              <div class="l-box">
+                <h3>Usuário</h3>
+                <input
+                  name="username"
+                  type="text"
+                  ng-model="login_ctrl.username"
+                  placeholder="Insira seu login"
+                  class="input-login"
+                  required
+                />
+                <small
+                  id="username_required_error"
+                  class="error"
+                  ng-show="(
+                    login_ctrl[
+                      'login_form'
+                    ].username.$dirty ||
+                    login_ctrl[
+                      'login_form'
+                    ].$submitted ) &&
+                    login_ctrl[
+                      'login_form'
+                    ].username.$error.required"
+                  translate
+                >Campo obrigatório</small>
+              </div>
+            </div>
+            <div class="pass side">
+              <div class="l-box">
+                <h3>Senha</h3>
+                <input
+                  name="password"
+                  type="password"
+                  ng-model="login_ctrl.password"
+                  placeholder="Insira sua senha"
+                  class="input-login"
+                  required
+                />
+                <small
+                  id="password_required_error"
+                  class="error"
+                  ng-show="(
+                    login_ctrl[
+                      'login_form'
+                    ].password.$dirty ||
+                    login_ctrl[
+                      'login_form'
+                    ].$submitted ) &&
+                    login_ctrl[
+                      'login_form'
+                    ].password.$error.required"
+                  translate
+                >Campo obrigatório</small>
+              </div>
+            </div>
+          </div>
+          <!-- /.form-top -->
+          <div class="form-bottom group">
+            <div class="server">
+              <span>Servidor:</span>
+                <input
+                  name="login_form.host"
+                  type="text"
+                  ng-model="login_ctrl.host"
+                  placeholder="0.0.0.0"
+                  class="server-input color-1"
+                />
+            </div>
+            <div class="enter">
+              <button class="btn btn-login">Entrar</button>
+            </div>
+          </div>
+          <!-- /.form-bottom -->
+        </form>
+
+      </div>
+      <!-- /.login-box -->
+
+    </div>
+    <!-- /.center-content -->
+
+  </div>
+  <!-- /.container -->
+</section>
+<!-- /#login-section  -->

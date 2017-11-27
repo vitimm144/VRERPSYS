@@ -1,0 +1,54 @@
+{
+  "name": "vrerp_sys",
+  "projectName": "VRERP",
+  "productName": "SYS",
+  "description": "Controle de caixa",
+  "version": "0.0.1",
+  "author": "VR",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager ./ incall --all --out /tmp/Electron_apps_packages/in_call --electron-version 1.6.6 --overwrite",
+    "pack": "build --dir",
+    "dist": "build -w -l --x64",
+    "release": "build -w --ia32 --publish always"
+  },
+  "devDependencies": {
+    "bower": "1.8.0",
+    "electron": "~1.6.2",
+    "electron-packager": "^8.6.0",
+    "electron-builder": "^17.10.0"
+  },
+  "build": {
+    "icon": "build/icon.ico",
+    "publish": 
+      {
+        "provider": "generic",
+        "url": "http://localhost/"
+      }
+    ,
+    "appId": "vrerp_sys",
+    "win":{
+      "icon": "build/icon.ico",
+      "target": ["nsis"]
+    },
+    "asar": false,
+    "nsis": {
+      "oneClick": false,
+      "installerHeader": "build/installerHeader.bmp",
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/installerIcon.ico",
+      "uninstallerIcon": "build/uninstallerIcon.ico",
+      "installerHeaderIcon": "build/installerHeaderIcon.ico",
+      "perMachine": true
+    }
+  },
+  "dependencies": {
+    "autobahn": "^0.12.0",
+    "electron-is": "^2.3.0",
+    "electron-json-storage": "^3.0.4",
+    "electron-log": "^2.2.6",
+    "electron-publisher-s3": "^18.0.1",
+    "electron-updater": "^1.16.0"
+  }
+}

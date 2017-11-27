@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>VRERP SYS</title>
+    <link
+      rel="stylesheet"
+      href="bower_components/datatables.net-dt/css/jquery.dataTables.css"
+    >
+
+    <!-- roboto fonts -->
+    <link rel="stylesheet" href="assets/fonts/roboto.css">
+    <!-- bootstrap base -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- mCustomScrollbar -->
+    <link rel="stylesheet" href="assets/css/jquery.mCustomScrollbar.css">
+    <!-- style -->
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body ng-app="vrerpsys" ng-cloak>
+    <!-- Insert this line above script imports  -->
+    <script>
+      if (
+        typeof module === 'object'
+      ) {
+        window.module = module;
+        module = undefined;
+      }
+    </script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script
+      src="bower_components/datatables.net/js/jquery.dataTables.min.js"
+    ></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script
+      src="bower_components/angular-datatables/dist/angular-datatables.min.js"
+    ></script>
+    <script
+      src="bower_components/angular-ui-router/release/angular-ui-router.js"
+    ></script>
+    <script src="bower_components/lodash/lodash.js"></script>
+    <script
+      src="bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"
+    ></script>
+    <script
+      src="bower_components/ng-scrollbars/dist/scrollbars.min.js"
+    ></script>
+    <script>
+      const electron = require( 'electron' );
+      const storage = require('electron-json-storage');
+      const autobahn = require('autobahn');
+      const path = require( 'path' );
+      const url = require( 'url' );
+      const ipcRenderer = electron.ipcRenderer;
+      const notifier = require( 
+        path.join( __dirname, 'electron-notifications' )
+      );
+      const package = require('./package.json');
+
+      var autobahn_connection = null;
+      var autobahn_session = null;
+      var notifications = {};
+      var tray;
+
+      function connect_autobahn ( host ) {
+        console.log('connect_autobahn', host)
+        if ( host ) {
+          var promise = null;
+          console.log('Connecting autobahn')
+          autobahn_connection = new autobahn.Connection(
+            {
+              'url': 'ws://' + host + ':8080/ws',
+              'realm': 'realm1',
+              'max_retries': -1,
+              'initial_retry_delay': 1,
+              'retry_delay_growth': 2,
+              'max_retry_delay': 20
+            }
+          );
+
+          promise = new Promise(
+            function ( resolve, reject ) {
+
+              autobahn_connection.onopen = function ( session ) {
+                autobahn_session = session;
+                console.log( 'Autobahn connected', autobahn_session )
+                resolve( "Promise autobahn_connection resolvida" )
+              };
+            }
+          );
+
+          autobahn_connection.onclose = function ( reason, details ) {
+            console.log( "Autobahn disconnected: ", reason, details )
+          };
+
+          autobahn_connection.open();
+
+          return promise;
+        } else {
+          console.log('connect_autobahn ERROR NO HOST', host)
+        }
+      };
+    </script>
+    <script src="app.js"></script>
+    <script src="login_ctrl.js"></script>
+    <script src="contacts_ctrl.js"></script>
+    <script src="contact_edit_ctrl.js"></script>
+    <script src="window_ctrl.js"></script>
+    <script src="change_password.js"></script>
+    <script src="recent_calls_ctrl.js"></script>
+
+    <div id="frame">
+      <!-- Window Bar -->
+      <section
+        id="window-bar"
+        ng-controller="WindowCtrl as window_ctrl"
+        ng-cloak
+      >
+        <div class="window-drag"></div>
+        <div class="window-controls">
+          <div
+            class="action action-minimize"
+            ng-click="window_ctrl.minimize()"
+          >
+            <img src="assets/images/window_ico_minimize.png" alt="Minimizar">
+          </div>
+          <div
+            class="action action-maximize"
+            ng-click="window_ctrl.maximize()"
+            ng-if="!window_ctrl.is_maximized"
+            ng-cloak
+          >
+            <img src="assets/images/window_ico_maximize.png" alt="Maximizar">
+          </div>
+          <div
+            class="action action-maximize"
+            ng-click="window_ctrl.restore()"
+            ng-if="window_ctrl.is_maximized"
+            ng-cloak
+          >
+            <img src="assets/images/window_ico_restore.png" alt="Rest. Tamanho">
+          </div>
+          <div
+            class="action action-close"
+            ng-click="window_ctrl.close()"
+          >
+            <img src="assets/images/window_ico_close.png" alt="Fechar">
+          </div>
+        </div>
+      </section>
+
+      <div ng-controller="LoginCtrl as login_ctrl">
+        <ui-view ng-cloak></ui-view>
+        <div ui-view="form" ng-cloak></div>
+        <div ui-view="recent_calls" ng-cloak></div>
+      </div>
+    </div>
+
+    <script>
+      // You can also require other files to run in this process
+      require( './renderer.js' );
+    </script>
+    <!-- Insert this line after script imports -->
+    <script>
+      if ( window.module ) {
+        module = window.module;
+      }
+    </script>
+  </body>
+
+</html>
