@@ -21,16 +21,16 @@
   },
   "build": {
     "icon": "build/icon.ico",
-    "publish": 
-      {
-        "provider": "generic",
-        "url": "http://localhost/"
-      }
-    ,
+    "publish": {
+      "provider": "generic",
+      "url": "http://localhost/"
+    },
     "appId": "vrerp_sys",
-    "win":{
+    "win": {
       "icon": "build/icon.ico",
-      "target": ["nsis"]
+      "target": [
+        "nsis"
+      ]
     },
     "asar": false,
     "nsis": {
@@ -46,7 +46,7 @@
   "dependencies": {
     "autobahn": "^0.12.0",
     "electron-is": "^2.3.0",
-    "electron-json-storage": "^3.0.4",
+    "electron-json-storage": "^4.0.1",
     "electron-log": "^2.2.6",
     "electron-publisher-s3": "^18.0.1",
     "electron-updater": "^1.16.0"

@@ -1,4 +1,4 @@
-angular.module( 'inCall' )
+angular.module( 'vrerpsys' )
 .controller( 'ContactEditCtrl', function (
   $state,
   $interval,
@@ -27,15 +27,12 @@ angular.module( 'inCall' )
   });
 
   contact_edit_ctrl.contact = {
-    'Firstname': null,
-    'Lastname': null,
-    'Countrycode': null,
-    'Areacode': null,
-    'Phonenumber': null,
-    'Email': null,
-    'Company': null,
-    'City': null,
-    'Region': null
+    'name': null,
+    'cpf': null,
+    'rg': null,
+    'address': null,
+    'cellphone': null,
+    'phone': null
   };
 
   console.log('State Params', $stateParams);
@@ -45,11 +42,12 @@ angular.module( 'inCall' )
       $http.get(
         'http://' +
         $scope.login_ctrl.host +
-        '/redt/api/contacts/' +
+        '/api/clients/' +
         id,
         {
           'headers': {
-            'Authorization': $scope.login_ctrl.token,
+            'Authorization':'Token ' +  $scope.login_ctrl.token,
+            'X-CSRFToken': $scope.login_ctrl.token,
             'Accept':'*/*'
           }
         }
@@ -104,12 +102,13 @@ angular.module( 'inCall' )
           $http.put(
             'http://' +
             $scope.login_ctrl.host +
-            '/redt/api/contacts/' +
-            $stateParams.contactId,
+            '/api/clients/' +
+            $stateParams.contactId + '/',
             contact_edit_ctrl.contact,
             {
               'headers': {
-                'Authorization': $scope.login_ctrl.token,
+                'Authorization':'Token ' +  $scope.login_ctrl.token,
+                'X-CSRFToken': $scope.login_ctrl.token,
                 'Accept':'*/*'
               }
             }
@@ -131,11 +130,12 @@ angular.module( 'inCall' )
           $http.post(
             'http://' +
             $scope.login_ctrl.host +
-            '/redt/api/contacts/',
+            '/api/clients/',
             contact_edit_ctrl.contact,
             {
               'headers': {
-                'Authorization': $scope.login_ctrl.token,
+                'Authorization':'Token ' +  $scope.login_ctrl.token,
+                'X-CSRFToken': $scope.login_ctrl.token,
                 'Accept':'*/*'
               }
             }

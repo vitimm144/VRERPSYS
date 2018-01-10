@@ -32,155 +32,91 @@
               <label>Nome</label>
               <input
                 class="input-full"
-                id="contact-firstname"
-                name="contact_firstname"
+                id="contact-name"
+                name="contact_name"
                 type="text"
-                ng-model="contact_edit_ctrl.contact.Firstname"
+                ng-model="contact_edit_ctrl.contact.name"
                 required
               >
               <div
-                id="contact_firstname_required_error"
+                id="contact_name_required_error"
                 class="error"
                 ng-show="(
                   contact_edit_ctrl[
                     'contact_edit_form'
-                  ].contact_firstname.$dirty ||
+                  ].contact_name.$dirty ||
                   contact_edit_ctrl[
                     'contact_edit_form'
                   ].$submitted ) &&
                   contact_edit_ctrl[
                     'contact_edit_form'
-                  ].contact_firstname.$error.required"
+                  ].contact_name.$error.required"
                 translate
               >Campo obrigatório</div>
             </div>
 
             <div class="form-line">
-              <label>Sobrenome</label>
+              <label>CPF</label>
               <input
                 class="input-full"
-                id="contact-lastname"
-                name="contact-lastname"
+                id="contact-cpf"
+                name="contact-cpf"
                 type="text"
-                ng-model="contact_edit_ctrl.contact.Lastname"
+                ng-model="contact_edit_ctrl.contact.cpf"
               >
             </div>
 
+            <div class="form-line">
+              <label>RG</label>
+              <input
+                id="contact-rg"
+                name="contact-rg"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.rg"
+                class="input-full"
+              >
+            </div>
             <div class="form-line">
               <label>Email</label>
               <input
                 id="contact-email"
                 name="contact-email"
                 type="text"
-                ng-model="contact_edit_ctrl.contact.Email"
+                ng-model="contact_edit_ctrl.contact.email"
                 class="input-full"
               >
             </div>
-
             <div class="form-line">
               <label>Telefone</label>
               <input
-                id="contact-countrycode"
-                name="contact_countrycode"
-                type="text"
-                ng-model="contact_edit_ctrl.contact.Countrycode"
-                class="input-phone-area"
-                placeholder="Cód.País"
-                value="+55"
-                required
-              >
-              <input
-                id="contact-areacode"
-                name="contact_areacode"
-                type="text"
-                ng-model="contact_edit_ctrl.contact.Areacode"
-                class="input-phone-ddd"
-                placeholder="Cód.Área"
-                required
-              >
-              <input
                 id="contact-phone"
-                name="contact_phone"
+                name="contact-phont"
                 type="text"
-                ng-model="contact_edit_ctrl.contact.Phonenumber"
-                class="input-phone-number"
-                placeholder="Número"
-                required
+                ng-model="contact_edit_ctrl.contact.phone"
+                class="input-full"
               >
-              <div
-                id="contact_firstname_required_error"
-                class="error"
-                ng-show="(
-                    contact_edit_ctrl[
-                      'contact_edit_form'
-                    ].contact_countrycode.$dirty ||
-                    contact_edit_ctrl[
-                      'contact_edit_form'
-                    ].contact_areacode.$dirty ||
-                    contact_edit_ctrl[
-                      'contact_edit_form'
-                    ].contact_phone.$dirty ||
-                    contact_edit_ctrl[
-                      'contact_edit_form'
-                    ].$submitted
-                  ) && (
-                    contact_edit_ctrl[
-                      'contact_edit_form'
-                    ].contact_countrycode.$error.required ||
-                    contact_edit_ctrl[
-                      'contact_edit_form'
-                    ].contact_areacode.$error.required ||
-                    contact_edit_ctrl[
-                      'contact_edit_form'
-                    ].contact_phone.$error.required
-                  )
-                "
-                translate
-              >Campos de telefone obrigatórios</div>
             </div>
-
-            <div class="form-line">
-              <label>Ramal</label>
+             <div class="form-line">
+              <label>Celular</label>
               <input
-                id="contact-extension"
-                name="contact-extension"
+                id="contact-cellphone"
+                name="contact-cellphone"
                 type="text"
-                ng-model="contact_edit_ctrl.contact.Extension"
+                ng-model="contact_edit_ctrl.contact.cellphone"
                 class="input-full"
               >
             </div>
 
             <div class="form-line">
-              <label>Empresa</label>
-              <input
-                id="contact-company"
-                name="contact-company"
+              <label>Endereço</label>
+              <textarea
+                rows="4"
+                id="contact-address"
+                name="contact-address"
                 type="text"
-                ng-model="contact_edit_ctrl.contact.Company"
+                ng-model="contact_edit_ctrl.contact.address"
                 class="input-full"
-              >
-            </div>
-
-            <div class="form-line">
-              <label>Cidade</label>
-              <input
-                id="contact-city"
-                name="contact-city"
-                type="text"
-                ng-model="contact_edit_ctrl.contact.City"
-                class="input-full"
-              >
-            </div>
-
-            <div class="form-line">
-              <label>Região</label>
-              <input
-                id="contact-region"
-                name="contact-region"
-                type="text"
-                ng-model="contact_edit_ctrl.contact.Region"
-                class="input-full"
-              >
+                ></textarea>
             </div>
 
             <div class="form-line group">

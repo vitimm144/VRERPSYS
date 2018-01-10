@@ -273,9 +273,9 @@
           <tr>
             <th>Nome</th>
             <th>Telefone</th>
-            <th>Ramal</th>
-            <th>Empresa</th>
-            <th>Cidade/UF</th>
+            <th>Celular</th>
+            <th>CPF</th>
+            <th>RG</th>
             <th>Ações</th>
             <th>Tipo</th>
           </tr>
@@ -285,41 +285,18 @@
             ng-repeat="contact in contacts_ctrl.contacts
               track by $index"
           >
-            <td>{{ contact.Firstname + ' ' + contact.Lastname }}</td>
+            <td>{{ contact.name }}</td>
+            <td> {{ contact.phone }}</td>
+            <td>{{ contact.cellphone }}</td>
+            <td>{{ contact.cpf }}</td>
+            <td>{{ contact.rg  }}</td>
             <td>
-              {{
-                ( contact.Countrycode ? '+' + contact.Countrycode : '+55' ) +
-                ' ' + contact.Areacode + ' ' + contact.Phonenumber
-              }}
-            </td>
-            <td>{{ contact.Extension }}</td>
-            <td>{{ contact.Company }}</td>
-            <td>
-              {{
-                (
-                  contact.City ? contact.City + (
-                    contact.Region ? '/' + contact.Region : ''
-                  ) : ''
-                )
-              }}
-            </td>
-            <td>
-<!--             <button
-                ng-click="contacts_ctrl.call_contact(
-                  contact.Countrycode,
-                  contact.Areacode,
-                  contact.Phonenumber
-                )"
-                class="btn btn-call"
-              ><span>Ligar</span></button>-->
               <button
-                ng-click="contacts_ctrl.edit_contact( contact.ID )"
-                ng-if="contact.Type == 'private'"
+                ng-click="contacts_ctrl.edit_contact( contact.id )"
                 class="btn btn-edit"
               ><span>Editar</span></button>
               <button
-                ng-click="contacts_ctrl.remove_contact( contact.ID )"
-                ng-if="contact.Type == 'private'"
+                ng-click="contacts_ctrl.remove_contact( contact.id )"
                 class="btn btn-delete"
               ><span>Excluir</span></button>
             </td>

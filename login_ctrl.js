@@ -151,15 +151,17 @@ angular.module( 'vrerpsys' )
         function ( response ) {
           console.log( 'Login post OK', response )
 
-          login_ctrl.email = response.data.email;
-          login_ctrl.name = response.data.name;
-          login_ctrl.peers = response.data.peers;
+//          login_ctrl.email = response.data.email;
+//          login_ctrl.name = response.data.name;
+//          login_ctrl.peers = response.data.peers;
           login_ctrl.token = response.data.token;
+          console.log( 'Login post OK', login_ctrl.host )
 
+          console.log( 'Login post OK', login_ctrl.username )
           storage.set( 'username', { value: login_ctrl.username } );
-          storage.set( 'email', { value: response.data.email } );
-          storage.set( 'name', { value: response.data.name } );
-          storage.set( 'peers', { value: response.data.peers } );
+//          storage.set( 'email', { value: response.data.email } );
+//          storage.set( 'name', { value: response.data.name } );
+//          storage.set( 'peers', { value: response.data.peers } );
           storage.set( 'host', { value: login_ctrl.host } );
           storage.set(
             'token',
