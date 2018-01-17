@@ -1,5 +1,5 @@
 angular.module( 'vrerpsys' )
-.controller( 'RecentCallsCtrl', function (
+.controller( 'StockCtrl', function (
   $state,
   $interval,
   $scope,
@@ -10,10 +10,10 @@ angular.module( 'vrerpsys' )
   DTOptionsBuilder,
   DTColumnDefBuilder
 ) {
-  var recent_calls_ctrl = this;
+  var stock_ctrl = this;
 
-  recent_calls_ctrl.dtInstance = {};
-  recent_calls_ctrl.dtOptions = DTOptionsBuilder.newOptions().withPaginationType(
+  stock_ctrl.dtInstance = {};
+  stock_ctrl.dtOptions = DTOptionsBuilder.newOptions().withPaginationType(
     'full_numbers'
   ).withDisplayLength( 20 ).withLanguage(
     {
@@ -44,7 +44,7 @@ angular.module( 'vrerpsys' )
     true
   ).withOption( 'paging', true ).withOption('order', []);
 
-  recent_calls_ctrl.dtColumnDefs = [
+  stock_ctrl.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef( 0 ).notSortable(),
     DTColumnDefBuilder.newColumnDef( 1 ).notSortable(),
     DTColumnDefBuilder.newColumnDef( 2 ).notSortable(),
@@ -52,9 +52,9 @@ angular.module( 'vrerpsys' )
     DTColumnDefBuilder.newColumnDef( 4 ).notSortable()
   ];
 
-  recent_calls_ctrl.recent_calls_form = {};
+  stock_ctrl.stock_form = {};
 
-  console.log('RecentCallsCtrl')
+  console.log('StockCtrl')
 
   $scope.$on('$stateChangeSuccess', function(
     event,
@@ -65,33 +65,31 @@ angular.module( 'vrerpsys' )
   ){
     event.preventDefault();
     console.log('current_state',$state.current);
-    recent_calls_ctrl.current_state = $state.current;
+    stock_ctrl.current_state = $state.current;
   });
 
-  recent_calls_ctrl.get_calls = function ( id ) {
-    var get_calls = function () {
-      console.log('get_calls');
+  stock_ctrl.get_products = function ( id ) {
+    var get_products = function () {
+      console.log('get_products');
       $http.get(
         'http://' +
         $scope.login_ctrl.host +
-        '/redt/api/cdr/',
+        '/api/products/',
         {
           'headers': {
-            'Authorization': $scope.login_ctrl.token,
+            'Authorization':'Token ' +  $scope.login_ctrl.token,
+            'X-CSRFToken': $scope.login_ctrl.token,
             'Accept':'*/*'
-          },
-          'params': {
-            'limit': 30,
-            'peers': $scope.login_ctrl.peers
           }
+
         }
       ).then(
         function ( response ) {
-          console.log( 'Calls get OK', response )
-          $scope.login_ctrl.has_missed_calls = false;
-          recent_calls_ctrl.calls = response.data;
+          console.log( 'Products get OK', response )
+          $scope.login_ctrl.has_missed_products = false;
+          stock_ctrl.products = response.data.results;
         }, function ( response ) {
-          console.log( 'Calls get FAIL', response )
+          console.log( 'Products get FAIL', response )
           if ( response.status == 401 ) {
             $scope.login_ctrl.logout();
           }
@@ -103,7 +101,7 @@ angular.module( 'vrerpsys' )
       function ( response ) {
         console.log( 'ctrl_has', response )
         if ( response[ 1 ] ) {
-          get_calls();
+          get_products();
         }
       },
       function ( response ) {
@@ -112,9 +110,9 @@ angular.module( 'vrerpsys' )
     );
   };
 
-  recent_calls_ctrl.go_back = function () {
+  stock_ctrl.go_back = function () {
     $state.go( '^' );
   };
 
-  recent_calls_ctrl.get_calls();
+  stock_ctrl.get_products();
 });

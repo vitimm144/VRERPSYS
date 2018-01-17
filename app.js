@@ -63,13 +63,13 @@ angular.module(
       }
     ).state(
       {
-        'name': 'contacts.recent_calls',
-        'url': '/recent_calls',
+        'name': 'contacts.stock',
+        'url': '/stock',
         'views': {
-          'recent_calls@': {
-            'templateUrl': 'recent_calls.html',
-            'controller': 'RecentCallsCtrl',
-            'controllerAs': 'recent_calls_ctrl'
+          'stock@': {
+            'templateUrl': 'stock.html',
+            'controller': 'StockCtrl',
+            'controllerAs': 'stock_ctrl'
           }
         }
       }

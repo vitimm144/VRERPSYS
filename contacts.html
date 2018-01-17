@@ -50,7 +50,7 @@
 
       <div class="logo">
         <img
-          src="assets/images/incall_logo_square.png"
+          src="assets/images/logo_400.png"
           class="logo-incall-square"
         >
       </div>
@@ -167,7 +167,7 @@
 </section>
 <!-- /#header-section  -->
 
-<section
+<!--<section
   id="call-section"
   ng-class="{
     'call': contacts_ctrl.object_size( contacts_ctrl.calls )
@@ -220,8 +220,8 @@
     </div>
 
   </div>
-  <!-- /.container -->
-</section>
+   /.container 
+</section>-->
 <!-- /#call-section  -->
 
 <section
@@ -237,17 +237,17 @@
       <h1>Contatos</h1>
       <button
         class="btn"
-        ng-click="login_ctrl.recent_calls()"
-      >Registro de chamadas</button>
+        ng-click="login_ctrl.show_stock_view()"
+      >Estoque</button>
     </div>
 
-    <div
+<!--    <div
       class="alert-missed-calls"
       ng-if="login_ctrl.has_missed_calls"
     >
       <div class="relative">
         <button
-          ng-click="login_ctrl.recent_calls()"
+          ng-click="login_ctrl.stock()"
         >Existem chamadas perdidas.</button>
         <span
           class="btn-close"
@@ -256,7 +256,7 @@
           <img src="assets/images/alert-close.png">
         </span>
       </div>
-    </div>
+    </div>-->
 
     <div class="scroll-wrapper call">
       <table

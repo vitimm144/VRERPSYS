@@ -109,16 +109,24 @@
 
             <div class="form-line">
               <label>Endereço</label>
-              <textarea
-                rows="4"
+              <input
                 id="contact-address"
                 name="contact-address"
                 type="text"
                 ng-model="contact_edit_ctrl.contact.address"
                 class="input-full"
-                ></textarea>
+                >
             </div>
-
+            <div class="form-line">
+              <label>Facebook</label>
+              <input
+                id="contact-facebook"
+                name="contact-facebook"
+                type="text"
+                ng-model="contact_edit_ctrl.contact.facebook"
+                class="input-full"
+              >
+            </div>
             <div class="form-line group">
               <button
                 class="btn btn-update"

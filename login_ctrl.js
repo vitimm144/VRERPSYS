@@ -236,8 +236,9 @@ angular.module( 'vrerpsys' )
     $state.go( 'change_password' );
   };
 
-  login_ctrl.recent_calls = function () {
-    $state.go( 'contacts.recent_calls' );
+  login_ctrl.show_stock_view = function () {
+            console.log('GO to stock');
+    $state.go( 'contacts.stock' );
   };
 
   var dev_tools_count = 0;
