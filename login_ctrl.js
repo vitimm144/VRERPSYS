@@ -12,14 +12,13 @@ angular.module( 'vrerpsys' )
 
   login_ctrl.package = package;
 
-  login_ctrl.has_missed_calls = null;
+//  login_ctrl.has_missed_calls = null;
 
   console.log('LoginCtrl')
 
   login_ctrl.username = null;
-  login_ctrl.email = null;
-  login_ctrl.name = null;
-  login_ctrl.peers = [];
+//  login_ctrl.email = null;
+//  login_ctrl.name = null;
   login_ctrl.host = null;
   login_ctrl.token = null;
 
@@ -74,9 +73,8 @@ angular.module( 'vrerpsys' )
         storage.getMany(
           [
             'username',
-            'email',
-            'name',
-            'peers',
+//            'email',
+//            'name',
             'host',
             'token'
           ],
@@ -85,18 +83,17 @@ angular.module( 'vrerpsys' )
               console.log( 'Erro storage login', error )
               reject('Erro get_all_storage');
             } else {
+              console.log('get all storage success');
+              console.log(data);
               if ( data.username.value ) {
                 login_ctrl.username = data.username.value;
               }
-              if ( data.email.value ) {
-                login_ctrl.email = data.email.value;
-              }
-              if ( data.name.value ) {
-                login_ctrl.name = data.name.value;
-              }
-              if ( data.peers.value ) {
-                login_ctrl.peers = data.peers.value;
-              }
+//              if ( data.email.value ) {
+//                login_ctrl.email = data.email.value;
+//              }
+//              if ( data.name.value ) {
+//                login_ctrl.name = data.name.value;
+//              }
               if ( data.host.value ) {
                 login_ctrl.host = data.host.value;
               }
@@ -238,7 +235,18 @@ angular.module( 'vrerpsys' )
 
   login_ctrl.show_stock_view = function () {
             console.log('GO to stock');
+    login_ctrl.public_filter_class = 'stock';
     $state.go( 'contacts.stock' );
+  };
+  login_ctrl.show_cash_view = function () {
+            console.log('GO to cash');
+    login_ctrl.public_filter_class = 'cash';
+    $state.go( 'contacts.cash' );
+  };
+  login_ctrl.show_contacts_view = function () {
+            console.log('GO to contacts');
+    login_ctrl.public_filter_class = 'contacts';
+    $state.go( 'contacts' );
   };
 
   var dev_tools_count = 0;

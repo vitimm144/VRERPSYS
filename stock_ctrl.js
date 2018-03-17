@@ -97,7 +97,7 @@ angular.module( 'vrerpsys' )
       );
     };
 
-    $scope.login_ctrl.ctrl_has( [ 'token', 'peers', 'host' ] ).then(
+    $scope.login_ctrl.ctrl_has( [ 'token', 'host' ] ).then(
       function ( response ) {
         console.log( 'ctrl_has', response )
         if ( response[ 1 ] ) {
