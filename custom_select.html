@@ -1,0 +1,65 @@
+<div>
+  <div class="chosen-ones pure-input-2-3">
+    <div ng-repeat="item in selected" class="chosen-option">
+      <span
+        class="delete-option"
+        ng-click="unselect( item, $index )"
+        ng-if="config.multiple || config.remove"
+      ></span>
+      <div class="value option-chosen">
+        <span
+          ng-repeat="field in config.show_fields"
+        >{{ item[field] + ' ' }}</span>
+      </div>
+      <input
+        id="option-{{ $index }}"
+        class="css-checkbox"
+        type="checkbox"
+        ng-if="config.checkbox && ( selected.length > config.min_checkbox )"
+        ng-model="item[ config.checkbox ]"
+      />
+      <label for="option-{{ $index }}" class="pure-checkbox css-label-cb">
+      </label>
+    </div>
+  </div>
+  <div
+    class="option-select pure-input-2-3"
+    ng-class="{ open: open_options }"
+  >
+    <input
+      ng-model="search"
+      type="text"
+      class="option-input"
+      placeholder="{{ config.placeholder }}"
+      ng-focus="open_options=true;"
+      ng-click="open_options=true;"
+    />
+    <span class="arrow-down" ng-click="open_options=!open_options;"></span>
+    <div class="sel-options mCustomScrollbar">
+      <ul>
+        <li
+          ng-repeat="option in filtered_options = (
+            config.options | filter:expression:comparator
+          )"
+          ng-click="select( option )"
+          ng-if="config.multiple"
+        >
+          <span
+            ng-repeat="field in config.show_fields"
+          >{{ option[field] + ' ' }}</span>
+        </li>
+        <li
+          ng-repeat="option in filtered_options = (
+            config.options | filter:expression:comparator
+          )"
+          ng-click="choose( option )"
+          ng-if="!config.multiple"
+        >
+          <span
+            ng-repeat="field in config.show_fields"
+          >{{ option[field] + ' ' }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

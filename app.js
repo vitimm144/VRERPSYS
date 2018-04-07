@@ -23,14 +23,6 @@ angular.module(
       }
     ).state(
       {
-        'name': 'other',
-        'url': '/other',
-        'controller': 'otherCtrl',
-        'controllerAs': 'other_ctrl',
-        'templateUrl': 'other.html'
-      }
-    ).state(
-      {
         'name': 'contacts',
         'url': '/contacts',
         'controller': 'ContactsCtrl',
@@ -70,6 +62,18 @@ angular.module(
             'templateUrl': 'stock.html',
             'controller': 'StockCtrl',
             'controllerAs': 'stock_ctrl'
+          }
+        }
+      }
+    ).state(
+      {
+        'name': 'contacts.cash',
+        'url': '/cash',
+        'views': {
+          'stock@': {
+            'templateUrl': 'cash.html',
+            'controller': 'CashCtrl',
+            'controllerAs': 'cash_ctrl'
           }
         }
       }

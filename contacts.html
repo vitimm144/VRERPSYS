@@ -62,7 +62,7 @@
         </div>
 
         <div class="extension">
-          <div
+<!--          <div
             class="ext-title"
             ng-if="( login_ctrl.peers.length <= 1 )"
           >Ramal</div>
@@ -79,7 +79,7 @@
             <span ng-repeat="peer in login_ctrl.peers">
               {{ peer }}
             </span>
-          </div>
+          </div>-->
           <div class="ext-user color-1">
             <span class="user-name">
               {{ login_ctrl.name }}
@@ -92,11 +92,11 @@
             class="btn btn-exit bgcolor-1"
             ng-click="login_ctrl.logout()"
           >Sair</button>
-          <button
+<!--          <button
             class="btn btn-exit bgcolor-1"
             ng-click="login_ctrl.change_password()"
-          >Trocar senha</button>
-          <button class="btn btn-exit alert-icon">
+          >Trocar senha</button>-->
+<!--          <button class="btn btn-exit alert-icon">
             <img
               src="assets/images/alert-icon.png"
               ng-click="contacts_ctrl.show_messages = true;"
@@ -107,7 +107,7 @@
               )"
               ng-cloak
             >
-          </button>
+          </button>-->
         </div>
 
       </div>
@@ -116,30 +116,29 @@
       <div class="block-3">
         <div
           class="contacts-block-3"
-          ng-if="contacts_ctrl.current_state.name == 'contacts'"
+          
         >
           <div
               ng-class="{
-              'active': contacts_ctrl.public_filter_class == 'p'
+              'active': login_ctrl.public_filter_class == 'cash'
             }"
               class="btnX btn-all"
-              ng-click="contacts_ctrl.public_filter('p');"
-          >Todas</div>
-
+              ng-click="login_ctrl.show_cash_view();"
+          >Caixa</div>
           <div
             ng-class="{
-              'active': contacts_ctrl.public_filter_class == 'public'
+              'active': login_ctrl.public_filter_class == 'contacts'
             }"
             class="btnX btn-public"
-            ng-click="contacts_ctrl.public_filter('public');"
-          >Pública</div>
+            ng-click="login_ctrl.show_contacts_view();"
+          >Clientes</div>
           <div
             ng-class="{
-              'active': contacts_ctrl.public_filter_class == 'private'
+              'active': login_ctrl.public_filter_class == 'stock'
             }"
             class="btnX btn-personal"
-            ng-click="contacts_ctrl.public_filter('private');"
-          >Particular</div>
+            ng-click="login_ctrl.show_stock_view();"
+          >Estoque</div>
           <div
             class="btn-addcontact color-1"
             ng-click="contacts_ctrl.new_contact()"
@@ -230,15 +229,17 @@
   ng-class="{
     'incall': contacts_ctrl.object_size( contacts_ctrl.calls )
   }"
+  
 >
+  
   <div class="container">
 
     <div class="bar-title">
       <h1>Contatos</h1>
-      <button
+<!--      <button
         class="btn"
         ng-click="login_ctrl.show_stock_view()"
-      >Estoque</button>
+      >Estoque</button>-->
     </div>
 
 <!--    <div

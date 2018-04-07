@@ -1,20 +1,20 @@
-<section id="recent-calls" class="show table-section">
+<section id="cash-view" >
   <div class="container">
 
     <div class="bar-title">
-      <h1>Estoque</h1>
-<!--      <button
-        class="btn"
-        ng-click="stock_ctrl.go_back()"
-      >Contatos</button>-->
+      <h1>Caixa</h1>
+
+    </div>
+    
+    <div>
+      <redt_select
+        config="cash_ctrl.select_config"
+        ng-model="cash_ctrl.products"
+      ></redt_select>
     </div>
 
-    <div class="scroll-wrapper call">
+    <div class="">
       <table
-        datatable="ng"
-        dt-instance="stock_ctrl.dtInstance"
-        dt-options="stock_ctrl.dtOptions"
-        dt-column-defs="stock_ctrl.dtColumnDefs"
         class="row-border hover"
         cellpadding="0"
         cellspacing="0"
@@ -26,18 +26,20 @@
           <th>Descrição</th>
           <th>Tamanho</th>
           <th>Preço</th>
-          <th>Foto</th>
+          <th>Qtd</th>
+          <th> + </th>
+          <th> - </th>
         </tr>
         </thead>
         <tbody>
         <tr
-          ng-repeat="product in stock_ctrl.products track by $index"
+          ng-repeat="product in cash_ctrl.products track by $index"
         >
           <td>{{ product.code }}</td>
           <td>{{ product.description }}</td>
           <td>{{ product.size }}</td>
           <td>{{ product.products[0].value }}</td>
-          <td>{{ product.picture }}</td>
+          <td> - </td>
         </tr>
         <!--</div>-->
         </tbody>
@@ -46,6 +48,6 @@
     <!-- /.scroll-wrapper -->
 
   </div>
-  <!-- /.container -->
+  
+  
 </section>
-<!-- /#recent-calls-section  -->

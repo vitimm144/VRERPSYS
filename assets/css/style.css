@@ -545,7 +545,10 @@ html {
 }
 #recent-calls .dataTables_wrapper .dataTables_filter { display: none; }
 
-
+#cash-view{
+  position: relative;
+  z-index: 900;
+}
 
 
 /********* ADD / EDIT ********/
