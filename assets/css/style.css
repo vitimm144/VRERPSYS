@@ -726,11 +726,20 @@ html {
     margin-right: 12px;
 }
 
+#cash-view .form-control {
+    border: none;
+    border-radius: 0;
+    box-shadow : none;
+}
 
+#cash-view .form-control[readonly] {
+    background-color: #fff;
+}
 
-
-
-
+#cash-view .bar-title.row .btn{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
 
 /**************** RESPONSIVIDADE *******************/
 

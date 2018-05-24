@@ -1,21 +1,27 @@
 <section id="cash-view" >
   <div class="container">
 
-    <div class="bar-title">
-      <h1>Caixa</h1>
-
+    <div class="bar-title row">
+      <div class="col-xs-6">
+        <h1>Caixa</h1>
+      </div>
+      <div class="col-xs-6 text-right">
+        <button class="btn btn-info" ng-click="cash_ctrl.add_item()" title="Adicionar item">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </div>
     </div>
-    
+
     <div>
       <redt_select
         config="cash_ctrl.select_config"
         ng-model="cash_ctrl.products"
-      ></redt_select>
+      ></redt_select>    
     </div>
 
     <div class="">
       <table
-        class="row-border hover"
+        class="row-border hover table"
         cellpadding="0"
         cellspacing="0"
         border="0"
@@ -25,29 +31,57 @@
           <th>Código</th>
           <th>Descrição</th>
           <th>Tamanho</th>
-          <th>Preço</th>
+          <th>Valor Unitário</th>
           <th>Qtd</th>
-          <th> + </th>
-          <th> - </th>
+          <th>Valor Total</th>
+          <th>Remover</th>
         </tr>
         </thead>
         <tbody>
-        <tr
-          ng-repeat="product in cash_ctrl.products track by $index"
-        >
-          <td>{{ product.code }}</td>
-          <td>{{ product.description }}</td>
-          <td>{{ product.size }}</td>
-          <td>{{ product.products[0].value }}</td>
-          <td> - </td>
+        <tr ng-repeat="item in cash_ctrl.cart track by item.index">
+          <td>
+            <select class="form-control" ng-model="item.product" ng-options="product as product.code for product in cash_ctrl.products track by product.id"></select>
+          </td>
+          <td>
+            <select class="form-control" ng-model="item.product" ng-options="product as product.description for product in cash_ctrl.products track by product.id"></select>
+          </td>
+          <td>            
+            <input class="form-control" readonly value="{{ item.product.size }}">
+          </td>
+          <td>
+            <input class="form-control" readonly value="{{ item.product.products[0].value | number:2 }}">
+          </td>
+          <td>
+            <input class="form-control" type="number" ng-model="item.quantity" min="0">
+          </td>
+          <td>
+            <input class="form-control" readonly value="{{ item.product.products[0].value * item.quantity | number:2 }}">
+          </td>
+          <td>
+            <button class="btn btn-danger" ng-click="cash_ctrl.remove_item($index)" title="Remover item">
+              <span class="glyphicon glyphicon-minus"></span>
+            </button>
+          </td>
         </tr>
         <!--</div>-->
         </tbody>
+        <tfoot ng-if="cash_ctrl.cart.length">
+          <tr>
+            <td colspan="4"></td>
+            <td>
+              <input class="form-control" readonly value="{{ cash_ctrl.items() | number }}">
+            </td>
+            <td>
+              <input class="form-control" readonly value="{{ cash_ctrl.total() | number:2 }}">
+            </td>
+            <td></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
     <!-- /.scroll-wrapper -->
 
   </div>
-  
-  
+
+
 </section>
