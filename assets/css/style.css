@@ -179,7 +179,7 @@ html {
 #header-section .block-3 .btn-all { top: 42px; right: 326px; }
 #header-section .block-3 .btn-public { top: 42px; right: 263px; }
 #header-section .block-3 .btn-personal { top: 42px; right: 179px; }
-#header-section .block-3 .btn-addcontact { 
+#header-section .block-3 .btn-addcontact {
     position: absolute;
     top: 68px;
     right: 179px;
@@ -732,8 +732,9 @@ html {
     margin-right: 12px;
 }
 
-#cash-view .form-control {
-    border: none;
+#cash-view .form-control,
+#cash-view .panel,
+#cash-view .list-group {
     border-radius: 0;
     box-shadow : none;
 }
