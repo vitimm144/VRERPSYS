@@ -545,9 +545,15 @@ html {
 }
 #recent-calls .dataTables_wrapper .dataTables_filter { display: none; }
 
+/********* TELA DE ESTOQUE ********/
 #cash-view{
-  position: relative;
+  position: fixed;
   z-index: 900;
+  top: 140px;
+  left: 0;
+  background-color: #fff;
+  width: 100vw;
+  height: calc(100vh - 140px);
 }
 
 
