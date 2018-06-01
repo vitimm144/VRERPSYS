@@ -26,8 +26,8 @@ angular.module( 'vrerpsys' )
     console.log('current_state',$state.current);
     cash_ctrl.current_state = $state.current;
   });
-  
-  
+
+
   cash_ctrl.dtOptions = DTOptionsBuilder.newOptions().withPaginationType(
     'full_numbers'
   ).withDisplayLength( 20 ).withLanguage(
@@ -65,7 +65,7 @@ angular.module( 'vrerpsys' )
     DTColumnDefBuilder.newColumnDef( 2 ).notSortable(),
     DTColumnDefBuilder.newColumnDef( 3 ).notSortable()
   ];
-  
+
   cash_ctrl.select_config = {
     'options': cash_ctrl.products,
     'placeholder': 'Digite um código ou um produto',
@@ -118,37 +118,5 @@ angular.module( 'vrerpsys' )
   };
 
   cash_ctrl.get_products();
-
-  cash_ctrl.cart = [];
-
-  cash_ctrl.add_item = function(){
-    cash_ctrl.cart.push({
-      'index': cash_ctrl.cart.length+1,
-      'product': null,
-      'quantity': 1
-    });
-  }
-
-  cash_ctrl.remove_item = function(index){
-    cash_ctrl.cart.splice(index, 1);
-  }
-
-  cash_ctrl.items = function(){
-    total = 0;
-    angular.forEach(cash_ctrl.cart, function(item, key) {
-      total = total+item.quantity
-    });
-    return total;
-  }
-
-  cash_ctrl.total = function(){
-    total = 0;
-    angular.forEach(cash_ctrl.cart, function(item, key) {
-      if(item.product){
-        total = total+(item.product.products[0].value * item.quantity);
-      }
-    });
-    return total;
-  }
 
 });
