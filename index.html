@@ -13,9 +13,11 @@
     <!-- bootstrap base -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <!-- font fontawesome -->
-    <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">    
+    <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
     <!-- mCustomScrollbar -->
     <link rel="stylesheet" href="assets/css/jquery.mCustomScrollbar.css">
+    <!-- ui select -->
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.min.css">
     <!-- style -->
     <link rel="stylesheet" href="assets/css/style.css">
   </head>
@@ -47,6 +49,7 @@
     <script
       src="bower_components/ng-scrollbars/dist/scrollbars.min.js"
     ></script>
+    <script src="bower_components/angular-ui-select/dist/select.min.js"></script>
     <script>
       const electron = require( 'electron' );
       const storage = require('electron-json-storage');
@@ -54,7 +57,7 @@
       const path = require( 'path' );
       const url = require( 'url' );
       const ipcRenderer = electron.ipcRenderer;
-      const notifier = require( 
+      const notifier = require(
         path.join( __dirname, 'electron-notifications' )
       );
       const package = require('./package.json');

@@ -3,7 +3,8 @@ angular.module(
   [
     'ui.router',
     'datatables',
-    'ngScrollbars'
+    'ngScrollbars',
+    'ui.select'
   ]
 )
 .config(

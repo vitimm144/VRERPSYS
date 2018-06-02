@@ -25,6 +25,7 @@
     "angular-ui-router": "~0.4.2",
     "lodash": "~4.17.4",
     "angular-datatables": "angular1",
-    "ng-scrollbars": "~0.0.11"
+    "ng-scrollbars": "~0.0.11",
+    "angular-ui-select": "^0.19.8"
   }
 }

@@ -50,7 +50,14 @@
               <div class="panel-body form-inline">
                 <div class="form-group">
                   <label for="product">Produto</label>
-                  <select class="form-control" id="product"></select>
+                  <ui-select ng-model="product" theme="bootstrap" style="width: 300px">
+                    <ui-select-match>
+                      <span>{{ $select.selected.code}} - {{ $select.selected.description}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="product in (cash_ctrl.products | filter: $select.search) track by product.code">
+                      <span>{{ product.code }} - {{ product.description }}</span>
+                    </ui-select-choices>
+                  </ui-select>
                 </div>
                 <div class="form-group">
                   <label for="quantity">Quantidade</label>
@@ -96,7 +103,14 @@
           <div class="panel-body form-inline">
             <div class="form-group">
               <label for="product">Forma</label>
-              <select class="form-control" id="product"></select>
+              <ui-select ng-model="payment_method" theme="bootstrap" style="width: 200px">
+                <ui-select-match>
+                  <span>{{ $select.selected.description}}</span>
+                </ui-select-match>
+                <ui-select-choices repeat="payment_method in (cash_ctrl.payment_methods | filter: $select.search) track by payment_method.description">
+                  <span>{{ payment_method.description }}</span>
+                </ui-select-choices>
+              </ui-select>
             </div>
             <button type="submit" class="btn btn-info">
               <i class="fa fa-plus"></i>

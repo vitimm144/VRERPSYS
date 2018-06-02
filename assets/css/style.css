@@ -744,6 +744,15 @@ html {
     background-color: #fff;
 }
 
+.ui-select-container {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.ui-select-container .form-control {
+    width: 100%;
+}
+
 /**************** RESPONSIVIDADE *******************/
 
 @media (max-width: 1199px) {
