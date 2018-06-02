@@ -24,7 +24,14 @@
                 <b>Vendedor(a)</b>
               </div>
               <div class="panel-body">
-                <select name="" id="" class="form-control"></select>
+                <ui-select ng-model="seller" theme="bootstrap" style="width: 100%">
+                  <ui-select-match>
+                    <span>{{ $select.selected.name }}</span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="seller in (cash_ctrl.sellers | filter: $select.search) track by seller.name">
+                    <span>{{ seller.name }}</span>
+                  </ui-select-choices>
+                </ui-select>
               </div>
             </div>
           </div>
@@ -35,7 +42,14 @@
                 <b>Cliente</b>
               </div>
               <div class="panel-body">
-                <select name="" id="" class="form-control"></select>
+                <ui-select ng-model="client" theme="bootstrap" style="width: 100%">
+                  <ui-select-match>
+                    <span>{{ $select.selected.name }}</span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="client in (cash_ctrl.clients | filter: $select.search) track by client.name">
+                    <span>{{ client.name }}</span>
+                  </ui-select-choices>
+                </ui-select>
               </div>
             </div>
           </div>
