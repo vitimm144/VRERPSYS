@@ -753,8 +753,8 @@ html {
     width: 100%;
 }
 
-#quantity{
-    width: 5em;
+.amount[type=number]{
+    width: 7em;
 }
 
 /*** Tabela de produtos com overflow no tbody ***/

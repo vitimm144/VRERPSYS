@@ -117,6 +117,40 @@ angular.module( 'vrerpsys' )
     );
   };
 
+  cash_ctrl.paymentModes = [
+    {'description': 'A', 'mode': 'A'},
+    {'description': 'CP', 'mode': 'CP'}
+  ];
+
   cash_ctrl.get_products();
+
+  cash_ctrl.sell = {
+    'id': null,
+    'products': [],
+    'payments': [],
+    'status': 0,
+    'saleswoman': null,
+    'client': null,
+    'deduction': 0
+  };
+
+  cash_ctrl.addProduct = function(){
+    cash_ctrl.sell.products.push({
+      'id': cash_ctrl.sell.products.length+1,
+      'product': cash_ctrl.newProduct.product,
+      'amount': cash_ctrl.newProduct.amount
+    });
+    cash_ctrl.newProduct = null;
+  }
+
+  cash_ctrl.addPayment = function(){
+    cash_ctrl.sell.payments.push({
+      'id': cash_ctrl.sell.payments.length+1,
+      'mode': cash_ctrl.newPayment.mode,
+      'plots_amount': 1,
+      'value': cash_ctrl.newPayment.value
+    });
+    cash_ctrl.newPayment = null;
+  }
 
 });
