@@ -154,7 +154,9 @@
             </thead>
             <tbody>
               <tr ng-repeat="item in cash_ctrl.sell.payments track by item.id">
-                <td>{{ item.mode }}</td>
+                <td ng-repeat="paymentMode in cash_ctrl.paymentModes" ng-if="item.mode == paymentMode.mode">
+                  {{ paymentMode.description }}
+                </td>
                 <td>{{ item.plots_amount }}</td>
                 <td>{{ item.value | currency:"R$" }}</td>
               </tr>

@@ -118,8 +118,31 @@ angular.module( 'vrerpsys' )
   };
 
   cash_ctrl.paymentModes = [
-    {'description': 'A', 'mode': 'A'},
-    {'description': 'CP', 'mode': 'CP'}
+    {
+      'mode': 'D',
+      'description': 'Débito'
+    }, {
+      'mode': 'CA',
+      'description': 'Crédito à Vista'
+    }, {
+      'mode': 'CP',
+      'description': 'Crédito Parcelado'
+    }, {
+      'mode': 'A',
+      'description': 'À Vista'
+    }, {
+      'mode': 'CHA',
+      'description': 'Cheque à Vista'
+    }, {
+      'mode': 'CHP',
+      'description': 'Cheque Parcelado'
+    }, {
+      'mode': 'VP',
+      'description': 'Vale Parcelado'
+    }, {
+      'mode': 'V',
+      'description': 'Vale'
+    }
   ];
 
   cash_ctrl.get_products();
