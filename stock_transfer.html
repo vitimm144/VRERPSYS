@@ -1,0 +1,134 @@
+<section id="edit-section" class="show">
+  <div class="container">
+
+    <div class="center-content">
+
+      <h2
+        
+      >Transferência</h2>
+
+      <div class="edit-box">
+        <div >
+          <h3>Informações do Produto à ser transferido:</h3>
+          <div >
+
+            <div >
+              <div >Codigo</div>
+              <div >Produto</div>
+              <div >Quantidade</div>
+              <div >Loja</div>
+
+            </div>
+          </div>
+          <div >
+
+            <div >
+              <div >{{stock_transfer_ctrl.stock.product.code}}</div>
+              <div >{{stock_transfer_ctrl.stock.product.description}}</div>
+              <div >{{stock_transfer_ctrl.stock.amount}}</div>
+              <div >{{stock_transfer_ctrl.stock.user.username}}</div>
+
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <span ng-repeat="error in stock_transfer_ctrl.errors
+            track by $index"
+          >
+            {{ error }}
+          </span>
+        </div>
+        <div
+          class="btn-close"
+          ng-click="stock_transfer_ctrl.form_cancel()"
+        ><img src="assets/images/window_ico_close.png"></div>
+        
+        <form
+          name="stock_transfer_ctrl.transfer_form"
+          ng-submit="stock_transfer_ctrl.submit()"
+          novalidate
+        >
+          <div class="form-top group">
+            <div class="form-line">
+              <label>Loja</label>
+              
+              <select
+                type="number"
+                id="sale"
+                name="sale"
+                required
+                ng-model="stock_transfer_ctrl.post_data.user"
+                ng-options="user.id as user.username for user in stock_transfer_ctrl.users"
+                class="form-control">
+                  
+              </select>
+              
+              <div
+                id="sale_required_error"
+                class="error"
+                ng-show="(
+                  stock_transfer_ctrl[
+                    'transfer_form'
+                  ].sale.$dirty ||
+                  stock_transfer_ctrl[
+                    'transfer_form'
+                  ].$submitted ) &&
+                  stock_transfer_ctrl[
+                    'transfer_form'
+                  ].sale.$error.required"
+                translate
+              >Campo obrigatório</div>
+            </div>
+
+            <div class="form-line">
+              <label>Quantidade</label>
+              <input
+                id="amount"
+                name="amount"
+                type="number"
+                ng-model="stock_transfer_ctrl.post_data.amount"
+                class="form-control">
+              <div
+                id="amount_required_error"
+                class="error"
+                ng-show="(
+                  stock_transfer_ctrl[
+                    'transfer_form'
+                  ].amount.$dirty ||
+                  stock_transfer_ctrl[
+                    'transfer_form'
+                  ].$submitted ) &&
+                  stock_transfer_ctrl[
+                    'transfer_form'
+                  ].amount.$error.required"
+                translate
+              >Campo obrigatório</div>
+            </div>
+
+            <div class="form-line group">
+              <button
+                class="btn btn-update"
+              >Salvar</button>
+            </div>
+
+          </div>
+          <!-- /.form-top -->
+        </form>
+
+      </div>
+      <!-- /.edit-box -->
+      <p
+        class="obs"
+        ng-if="stock_transfer_ctrl.current_state.name == 'contacts.new'"
+      >
+        Obs: O contato adicionado só ficará disponível em sua Agenda Particular.
+      </p>
+
+    </div>
+    <!-- /.center-content -->
+
+  </div>
+  <!-- /.container -->
+</section>
+<!-- /#table-section  -->

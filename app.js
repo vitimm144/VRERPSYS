@@ -68,6 +68,18 @@ angular.module(
       }
     ).state(
       {
+        'name': 'contacts.transfer',
+        'url': '/stock/transfer/:stockId',
+        'views': {
+          'form@': {
+            'templateUrl': 'stock_transfer.html',
+            'controller': 'StockTransferCtrl',
+            'controllerAs': 'stock_transfer_ctrl'
+          }
+        }
+      }
+    ).state(
+      {
         'name': 'contacts.cash',
         'url': '/cash',
         'views': {

@@ -25,19 +25,30 @@
           <th>Código</th>
           <th>Descrição</th>
           <th>Tamanho</th>
+          <th>Quantidade</th>
           <th>Preço</th>
-          <th>Foto</th>
+          <th>Loja</th>
+          <th>Opções</th>
         </tr>
         </thead>
         <tbody>
         <tr
           ng-repeat="product in stock_ctrl.products track by $index"
         >
-          <td>{{ product.code }}</td>
-          <td>{{ product.description }}</td>
-          <td>{{ product.size }}</td>
-          <td>{{ product.products[0].value }}</td>
-          <td>{{ product.picture }}</td>
+          <td>{{ product.product.code }}</td>
+          <td>{{ product.product.description }}</td>
+          <td>{{ product.product.size }}</td>
+          <td>{{ product.amount }}</td>
+          <td>{{ product.product.products[0].value }}</td>
+          <td>{{ product.user.username }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn-primary"
+              ng-click="stock_ctrl.transfer(product.id)">
+              
+             Transferência </button>
+          </td>
         </tr>
         <!--</div>-->
         </tbody>

@@ -74,7 +74,7 @@ angular.module( 'vrerpsys' )
       $http.get(
         'http://' +
         $scope.login_ctrl.host +
-        '/api/products/',
+        '/api/stocks/',
         {
           'headers': {
             'Authorization':'Token ' +  $scope.login_ctrl.token,
@@ -112,6 +112,10 @@ angular.module( 'vrerpsys' )
 
   stock_ctrl.go_back = function () {
     $state.go( '^' );
+  };
+  stock_ctrl.transfer = function ( id ) {
+    console.log('transfer');
+    $state.go( 'contacts.transfer', { 'stockId': id } );
   };
 
   stock_ctrl.get_products();

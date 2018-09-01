@@ -27,8 +27,8 @@ function createWindow () {
     {
       'width': 950,
       'height': 620,  
-      'minWidth': 950,
-      'minHeight': 620,
+      'minWidth': 800,
+      'minHeight': 600,
       'frame': false,
       'icon': path.join( __dirname, 'assets/images/logo_128.png' ),
       'show': false
