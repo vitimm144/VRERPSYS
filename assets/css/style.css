@@ -611,6 +611,7 @@ html {
 #edit-section .form-top .form-line input::-webkit-input-placeholder { font-size: 10px !important; color: rgba(255,255,255,0.6); font-weight: 300; }
 #edit-section .form-top .form-line input.input-full {}
 #edit-section .form-top .input-phone-area { width: 58px; display: inline-block; text-align: center; margin-right: 2px; }
+#edit-section .form-top .input-amount { width: 58px; display: inline-block; text-align: center; margin-right: 2px; }
 #edit-section .form-top .input-phone-ddd { width: 58px; display: inline-block; text-align: center; margin-right: 2px; padding: 0 2px; }
 #edit-section .form-top .input-phone-number { width: 133px; display: inline-block;}
 #edit-section .form-top .btn-update {

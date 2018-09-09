@@ -10,27 +10,27 @@
       <div class="edit-box">
         <div >
           <h3>Informações do Produto à ser transferido:</h3>
-          <div >
+          <table class="table">
+            <thead>
+              
+              <tr>
 
-            <div >
-              <div >Codigo</div>
-              <div >Produto</div>
-              <div >Quantidade</div>
-              <div >Loja</div>
+                <th>Codigo</th>
+                <th >Produto</th>
+                <th >Quantidade</th>
+                <th >Loja</th>
 
-            </div>
-          </div>
-          <div >
-
-            <div >
-              <div >{{stock_transfer_ctrl.stock.product.code}}</div>
-              <div >{{stock_transfer_ctrl.stock.product.description}}</div>
-              <div >{{stock_transfer_ctrl.stock.amount}}</div>
-              <div >{{stock_transfer_ctrl.stock.user.username}}</div>
-
-            </div>
-          </div>
-        </div>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{stock_transfer_ctrl.stock.product.code}}</td>
+                <td>{{stock_transfer_ctrl.stock.product.description}}</td>
+                <td>{{stock_transfer_ctrl.stock.amount}}</td>
+                <td>{{stock_transfer_ctrl.stock.user.username}}</td>
+              </tr>
+            </tbody>
+        </table>
 
         <div>
           <span ng-repeat="error in stock_transfer_ctrl.errors
@@ -57,10 +57,19 @@
                 type="number"
                 id="sale"
                 name="sale"
+                style="border: 1px solid #04A9F2;
+                      background: rgba(255,255,255,0.15);
+                      border-radius: 2px;
+                      padding: 0 7px;
+                      line-height: 30px;
+                      height: 32px;
+                      width: 260px;
+                      font-size: 14px;
+                      font-weight: 300;"
                 required
                 ng-model="stock_transfer_ctrl.post_data.user"
                 ng-options="user.id as user.username for user in stock_transfer_ctrl.users"
-                class="form-control">
+                class="input-full">
                   
               </select>
               
@@ -87,8 +96,11 @@
                 id="amount"
                 name="amount"
                 type="number"
+                style="color: white;
+                      font-size: 14px;
+                      font-weight: 300;"
                 ng-model="stock_transfer_ctrl.post_data.amount"
-                class="form-control">
+                class="input-full">
               <div
                 id="amount_required_error"
                 class="error"
