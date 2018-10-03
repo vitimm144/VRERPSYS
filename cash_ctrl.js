@@ -166,14 +166,40 @@ angular.module( 'vrerpsys' )
     cash_ctrl.newProduct = null;
   }
 
-  cash_ctrl.addPayment = function(){
+  function pushPayment() {
     cash_ctrl.sell.payments.push({
       'id': cash_ctrl.sell.payments.length+1,
       'mode': cash_ctrl.newPayment.mode,
       'plots_amount': 1,
       'value': cash_ctrl.newPayment.value
     });
-    cash_ctrl.newPayment = null;
-  }
+    cash_ctrl.newPayment = {};
+  };
+
+  cash_ctrl.addPayment = function(){
+    cash_ctrl.newPayment.plots = [];
+
+    if(cash_ctrl.newPayment.mode == 'CHP'){
+      $('#plotsModal').modal('show');
+    }else{
+      pushPayment();
+    }
+  };
+
+  cash_ctrl.addPlot = function(){
+    cash_ctrl.newPayment.plots.push({
+      'date': null,
+      'plot': cash_ctrl.newPayment.plots.length+1,
+      'ploted_value': 0
+    });
+  };
+
+  $('#plotsModal').on('hide.bs.modal', function(e){
+    cash_ctrl.newPayment.value = 0;
+    cash_ctrl.newPayment.plots.forEach(function(plot) {
+      cash_ctrl.newPayment.value = cash_ctrl.newPayment.value + plot.ploted_value;
+    });
+    pushPayment();
+  });
 
 });

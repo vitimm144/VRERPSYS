@@ -736,10 +736,13 @@ html {
 #cash-view .form-control,
 #cash-view .panel,
 #cash-view .list-group,
-#cash-view .btn {
+#cash-view .btn,
+.modal-content,
+.modal-content .btn {
     border-radius: 0;
     box-shadow : none;
 }
+
 
 #cash-view .form-control[readonly] {
     background-color: #fff;
