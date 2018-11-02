@@ -1,4 +1,4 @@
-<section id="cash-view" >
+<section id="cash-view">
   <div class="container">
 
     <div class="bar-title row">
@@ -7,12 +7,12 @@
       </div>
     </div>
 
-    <div>
+<!--    <div>
       <redt_select
         config="cash_ctrl.select_config"
         ng-model="cash_ctrl.products"
       ></redt_select>
-    </div>
+    </div>-->
 
     <div class="row">
       <div class="col-xs-7">
@@ -28,7 +28,7 @@
                   <ui-select-match>
                     <span>{{ $select.selected.name }}</span>
                   </ui-select-match>
-                  <ui-select-choices repeat="seller.id as seller in (cash_ctrl.sellers | filter: $select.search) track by seller.name">
+                  <ui-select-choices repeat="seller.id as seller in (cash_ctrl.employees | filter: $select.search) track by seller.name">
                     <span>{{ seller.name }}</span>
                   </ui-select-choices>
                 </ui-select>
@@ -68,7 +68,7 @@
                     <ui-select-match>
                       <span>{{ $select.selected.code}} - {{ $select.selected.description}}</span>
                     </ui-select-match>
-                    <ui-select-choices repeat="product.id as product in (cash_ctrl.products | filter: $select.search) track by product.code">
+                    <ui-select-choices repeat="product in (cash_ctrl.products | filter: $select.search) track by product.code">
                       <span>{{ product.code }} - {{ product.description }}</span>
                     </ui-select-choices>
                   </ui-select>
@@ -79,29 +79,31 @@
                 </div>
                 <button type="submit" class="btn btn-info" ng-click="cash_ctrl.addProduct(cash_ctrl.item)">
                   <i class="fa fa-plus"></i>
-                  <span>Adicionar</span>
                 </button>
               </div>
               <table id="products" class="table-striped table-hover table table-condensed">
                 <thead>
                   <tr>
-                    <th>Qth.</th>
+                    <th>Qtd</th>
                     <th>Produto</th>
-                    <th>Valor Unitário</th>
-                    <th>Valor Total</th>
+                    <th>Unitário</th>
+                    <th>Total</th>
+                    <th>Excluir</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="item in cash_ctrl.sell.products track by item.id">
+                  <tr ng-repeat="item in sell_products track by item.id">
                     <td>{{ item.amount }}</td>
                     <td ng-repeat="product in cash_ctrl.products" ng-if="item.product == product.id">
-                      {{ product.description }}
-                    </td>
+                        {{ product.description }}</td>
                     <td ng-repeat="product in cash_ctrl.products" ng-if="item.product == product.id">
                       {{ product.products[0].value | currency:"R$" }}
                     </td>
                     <td ng-repeat="product in cash_ctrl.products" ng-if="item.product == product.id">
                       {{ product.products[0].value * item.amount | currency:"R$" }}
+                    </td>
+                    <td>
+                        <i class="fa fa-trash" ng-click="sell_products.splice($index, 1)"></i>
                     </td>
                   </tr>
                 </tbody>
@@ -109,9 +111,9 @@
               <div class="panel-footer text-right">
                 <span>
                   <b>Desconto:</b>
-                  <input type="number" ng-model="cash_ctrl.sell.deduction" min="0" step="0.01">
+                  <input type="number" ng-model="cash_ctrl.sell.deduction" ng-change="onDeductionChange()" min="0" step="0.01">
                 </span>
-                <span><b>Total:</b> R$ 0,00</span>
+                <span><b>Total:</b> {{ cash_ctrl.subTotalProducts | currency:"R$" }} </span>
               </div>
             </div>
           </div>
@@ -141,7 +143,6 @@
             </div>
             <button type="submit" class="btn btn-info" ng-click="cash_ctrl.addPayment()">
               <i class="fa fa-plus"></i>
-              <b>Adicionar</b>
             </button>
           </div>
           <table class="table table-striped table-hover table-condensed">
@@ -150,6 +151,7 @@
                 <th>Forma</th>
                 <th>Parcelas</th>
                 <th>Valor</th>
+                <th>Excluir</th>
               </tr>
             </thead>
             <tbody>
@@ -159,6 +161,10 @@
                 </td>
                 <td>{{ item.plots_amount }}</td>
                 <td>{{ item.value | currency:"R$" }}</td>
+                <td
+                  ng-click="cash_ctrl.sell.payments.splice($index, 1)">
+                  <i class="fa fa-trash danger"></i>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -171,7 +177,7 @@
           <table id="collapseTable" class="table table-condensed">
             <tr>
               <td>SUBTOTAL:</td>
-              <td class="text-right">R$ 0,00</td>
+              <td class="text-right">{{ cash_ctrl.subTotalProducts | currency:"R$" }}</td>
             </tr>
             <tr>
               <td>DESCONTOS:</td>
@@ -195,7 +201,7 @@
     </div>
     <div class="row">
       <div class="col-xs-12 text-right">
-        <button class="btn btn-success">
+        <button class="btn btn-success" ng-click="cash_ctrl.submit()">
           <i class="fa fa-check"></i>
           <span>Finalizar</span>
         </button>
@@ -216,12 +222,17 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Lançamento de Cheques</h4>
+        <h4 class="modal-title" id="myModalLabel">Parcelamento</h4>
+        <div>
+            <label for="parcel_length">Parcelas:</label>    
+            <input id="parcel_length" type="number" ng-change="onParcelChange()" ng-model="cash_ctrl.parcel_length">
+            <label> Valor total: {{ cash_ctrl.newPayment.value | currency: "R$" }} </label>
+        </div>
       </div>
       <div class="modal-body">
+        <label> Adicionar manualmente: </label>
         <button type="button" class="btn btn-info" ng-click="cash_ctrl.addPlot()">
           <i class="fa fa-plus"></i>
-          <b>Adicionar</b>
         </button>
         <table class="table">
           <thead>
@@ -237,13 +248,17 @@
               <td>{{ plot.plot }}</td>
               <td><input class="form-control" type="date" ng-model="plot.date"></td>
               <td><input class="form-control" type="number" step="0.01" ng-model="plot.ploted_value"></td>
-              <td class="text-center"><a class="text-danger" href="#" title="Remover"><i class="fa fa-trash"></i></a></td>
+              <td
+                  class="text-center"
+                  ng-click="cash_ctrl.newPayment.plots.splice($index, 1)">
+                  <i class="fa fa-trash danger"></i>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" >Fechar</button>
       </div>
     </div>
   </div>
