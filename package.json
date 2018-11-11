@@ -10,14 +10,15 @@
     "start": "electron .",
     "package": "electron-packager ./ incall --all --out /tmp/Electron_apps_packages/in_call --electron-version 1.6.6 --overwrite",
     "pack": "build --dir",
-    "dist": "build -w -l --x64",
+    "dist": "build -w --ia32",
     "release": "build -w --ia32 --publish always"
   },
   "devDependencies": {
     "bower": "1.8.0",
     "electron": "~1.6.2",
+    "electron-builder": "^17.10.0",
     "electron-packager": "^8.6.0",
-    "electron-builder": "^17.10.0"
+    "electron-rebuild": "^1.8.2"
   },
   "build": {
     "icon": "build/icon.ico",
@@ -49,6 +50,8 @@
     "electron-json-storage": "^4.0.1",
     "electron-log": "^2.2.6",
     "electron-publisher-s3": "^18.0.1",
-    "electron-updater": "^1.16.0"
+    "electron-updater": "^1.16.0",
+    "printer": "^0.2.2",
+    "text-table": "^0.2.0"
   }
 }

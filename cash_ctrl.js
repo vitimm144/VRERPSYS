@@ -11,13 +11,80 @@ angular.module( 'vrerpsys' )
   DTColumnDefBuilder
 ) {
   var cash_ctrl = this;
-
+  var fs = require('fs');
+  var printer = require('printer');
+  var table = require('text-table');
+  var headers = {
+    'headers': {
+      'Authorization':'Token ' +  $scope.login_ctrl.token,
+      'X-CSRFToken': $scope.login_ctrl.token,
+      'Accept':'*/*'
+    }
+  };
+  
   cash_ctrl.dtInstance = {};
   cash_ctrl.products = [];
   cash_ctrl.products_for_sale = [];
   cash_ctrl.subTotalProducts = 0;
   cash_ctrl.post_url = 'api/sales/';
+  $scope.sell_products = [];
+  $scope.payments = [];
   
+  console.log(printer.getDefaultPrinterName());
+  console.log(printer.getDefaultPrinterName());
+  console.log('SUPORTED PRINT FORMATS');
+  console.log(printer.getSupportedPrintFormats());
+  printHeader = `
+  
+   Cabeçalho entra aqui! 
+  
+  `;
+  
+  printFooter = `
+  
+   Rodapé entra aqui! 
+  
+  `;
+  $scope.salePrint = '';
+  
+  cash_ctrl.createSalePrint = function(){
+    var salePrint = printHeader;
+    var t = [];
+    t.push(["Cod:","Produto:", "qtd:", "unitário:" , "Total:"]);
+    
+    angular.forEach($scope.sell_products, function(product){
+      
+        console.log(product);
+        total = "R$ " + (parseFloat(product.price_value) * parseFloat(product.amount))
+        t.push([product.code, product.description, product.amount,"R$ " + product.price_value, total])
+//      salePrint += `${product.code}  ${product.description}       ${product.amount}      ${product.price_value}  R$ ${parseFloat(product.price_value) * parseFloat(product.amount)}\n`;
+    });
+    
+    console.log(t);
+    tproduct = table(t);
+    salePrint += tproduct;
+    salePrint += printFooter;
+    
+    return salePrint;
+  };
+  
+  $scope.sendPrint = function() {
+    var info = cash_ctrl.createSalePrint(); 
+      console.log(info);
+//    var info = 'texto'; 
+//    printer.printDirect({
+//      data: info,
+//      type: 'TEXT',
+//      success: function (jobID) {
+//        console.log("ID: " + jobID);
+//      },
+//      error: function (err) {
+//        console.log('printer module error: '+err);
+//        throw err;
+//      }
+//    });
+  };
+
   $scope.$on('$stateChangeSuccess', function(
     event,
     toState,
@@ -30,8 +97,6 @@ angular.module( 'vrerpsys' )
     cash_ctrl.current_state = $state.current;
   });
 
-  $scope.sell_products = [];
-  $scope.payments = [];
   cash_ctrl.dtOptions = DTOptionsBuilder.newOptions().withPaginationType(
     'full_numbers'
   ).withDisplayLength( 20 ).withLanguage(
@@ -69,14 +134,6 @@ angular.module( 'vrerpsys' )
     DTColumnDefBuilder.newColumnDef( 2 ).notSortable(),
     DTColumnDefBuilder.newColumnDef( 3 ).notSortable()
   ];
-  
-  var headers = {
-    'headers': {
-      'Authorization':'Token ' +  $scope.login_ctrl.token,
-      'X-CSRFToken': $scope.login_ctrl.token,
-      'Accept':'*/*'
-    }
-  };
     
 //  cash_ctrl.select_config = {
 //    'options': cash_ctrl.products,
@@ -234,6 +291,8 @@ angular.module( 'vrerpsys' )
     $scope.sell_products.push({
       'id': $scope.sell_products.length+1,
       'product': cash_ctrl.newProduct.product.id,
+      'description': cash_ctrl.newProduct.product.description,
+      'code': cash_ctrl.newProduct.product.code,
       'amount': cash_ctrl.newProduct.amount,
       'price':cash_ctrl.newProduct.product.products[0].id,
       'price_value':cash_ctrl.newProduct.product.products[0].value
