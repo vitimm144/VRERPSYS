@@ -155,7 +155,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="item in cash_ctrl.sell.payments track by item.id">
+                <tr ng-repeat="item in cash_ctrl.sell.payments track by item.id">
                 <td ng-repeat="paymentMode in cash_ctrl.paymentModes" ng-if="item.mode == paymentMode.mode">
                   {{ paymentMode.description }}
                 </td>
@@ -181,11 +181,11 @@
             </tr>
             <tr>
               <td>DESCONTOS:</td>
-              <td class="text-right">{{ cash_ctrl.sell.deduction | currency:"R$" }}</td>
+              <td class="text-right">{{ cash_ctrl.deduction_value | currency:"R$" }}</td>
             </tr>
             <tr>
               <td>PAGAMENTOS:</td>
-              <td class="text-right">R$ 0,00</td>
+              <td class="text-right">{{ cash_ctrl.payment_total | currency:"R$" }}</td>
             </tr>
             <tr>
               <td>TROCO:</td>
@@ -193,7 +193,7 @@
             </tr>
             <tr>
               <td>TOTAL A PAGAR:</td>
-              <td class="text-right">R$ 0,00</td>
+              <td class="text-right">{{ cash_ctrl.total_pay | currency:"R$" }}</td>
             </tr>
           </table>
         </div>

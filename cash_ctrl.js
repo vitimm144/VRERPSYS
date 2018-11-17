@@ -35,54 +35,76 @@ angular.module( 'vrerpsys' )
   console.log('SUPORTED PRINT FORMATS');
   console.log(printer.getSupportedPrintFormats());
   printHeader = `
-  
-   Cabeçalho entra aqui! 
-  
-  `;
+
+  Cabeçalho entra aqui! 
+
+  `  + '\n\n';
   
   printFooter = `
-  
-   Rodapé entra aqui! 
-  
-  `;
+
+  Rodapé entra aqui! 
+
+  ` + '\n\n';
   $scope.salePrint = '';
   
+  
+  
+  
   cash_ctrl.createSalePrint = function(){
-    var salePrint = printHeader;
+    var salePrint = [];
+    charCodeLatina(salePrint);
+    bold(salePrint, printHeader);
+    lineFeed(salePrint, 2);
+    
+    
     var t = [];
-    t.push(["Cod:","Produto:", "qtd:", "unitário:" , "Total:"]);
+    t.push([ "Cod:", "Prod:", "qtd:", "Unid:" , "Total:" ]);
     
     angular.forEach($scope.sell_products, function(product){
-      
         console.log(product);
-        total = "R$ " + (parseFloat(product.price_value) * parseFloat(product.amount))
-        t.push([product.code, product.description, product.amount,"R$ " + product.price_value, total])
-//      salePrint += `${product.code}  ${product.description}       ${product.amount}      ${product.price_value}  R$ ${parseFloat(product.price_value) * parseFloat(product.amount)}\n`;
+        total = (parseFloat(product.price_value) * parseFloat(product.amount))
+        total = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        price = parseFloat(product.price_value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        t.push([product.code, product.description, product.amount, price, total])
     });
     
     console.log(t);
-    tproduct = table(t);
-    salePrint += tproduct;
-    salePrint += printFooter;
+    tproduct = table(t, {align:[1, 1, 1, 1, 1]});
+    
+    normal(salePrint, tproduct)
+    lineFeed(salePrint, 1);
+    alignRight(salePrint);
+    underline2(
+      salePrint,
+      "Total: " + parseFloat(cash_ctrl.subTotalProducts).toLocaleString(
+        'pt-BR',
+        { style: 'currency', currency: 'BRL' }
+      )
+    )
+    
+    lineFeed(salePrint, 2);
+    alignCenter(salePrint)
+    bold(salePrint, printFooter);
+    fullCut(salePrint)
     
     return salePrint;
   };
   
   $scope.sendPrint = function() {
     var info = cash_ctrl.createSalePrint(); 
-      console.log(info);
+    console.log(info);
 //    var info = 'texto'; 
-//    printer.printDirect({
-//      data: info,
-//      type: 'TEXT',
-//      success: function (jobID) {
-//        console.log("ID: " + jobID);
-//      },
-//      error: function (err) {
-//        console.log('printer module error: '+err);
-//        throw err;
-//      }
-//    });
+    printer.printDirect({
+      data: new Buffer(info),
+      type: 'RAW',
+      success: function (jobID) {
+        console.log("ID: " + jobID);
+      },
+      error: function (err) {
+        console.log('printer module error: '+err);
+        throw err;
+      }
+    });
   };
 
   $scope.$on('$stateChangeSuccess', function(
@@ -301,6 +323,7 @@ angular.module( 'vrerpsys' )
   }
 
   function pushPayment() {
+    console.log('push payment');
     cash_ctrl.sell.payments.push({
       'id': cash_ctrl.sell.payments.length+1,
       'mode': cash_ctrl.newPayment.mode,
@@ -309,9 +332,15 @@ angular.module( 'vrerpsys' )
       'plots': cash_ctrl.newPayment.plots
     });
     cash_ctrl.newPayment = {};
+    cash_ctrl.payment_total = 0;
+    angular.forEach(cash_ctrl.sell.payments, function(payment){
+      cash_ctrl.payment_total += parseFloat(payment.value);
+    });
+    cash_ctrl.setMoneyChange();
   };
 
   cash_ctrl.addPayment = function(){
+    console.log('Add payment');
     cash_ctrl.newPayment.plots = [];
     mode = cash_ctrl.newPayment.mode; 
     if(mode == 'CHP' || mode == 'CP' || mode == 'VP'){
@@ -339,20 +368,48 @@ angular.module( 'vrerpsys' )
   });
   
   $scope.onParcelChange = function (){
-      console.log('onparcelchange');
-    var date = new Date;
-    var parcel = cash_ctrl.newPayment.value / cash_ctrl.parcel_length;
+    console.log('onparcelchange');
+    var date = new Date();
+    var parcel = (parseFloat(cash_ctrl.newPayment.value) / parseFloat(cash_ctrl.parcel_length)).toFixed(2);
+      console.log(cash_ctrl.parcel_length);
+      console.log(cash_ctrl.newPayment.value);
+      console.log(parcel);
     for( var i = 0; i < cash_ctrl.parcel_length; i++){
       date.setMonth(date.getMonth() + 1)
       cash_ctrl.newPayment.plots.push({
-      'date': new Date(date.toDateString()),
-      'plot': cash_ctrl.newPayment.plots.length+1,
-      'ploted_value': parcel
-    });
+        'date': new Date(date.toDateString()),
+        'plot': cash_ctrl.newPayment.plots.length+1,
+        'ploted_value': parseFloat(parcel)
+      });
     }
   };
+  cash_ctrl.deduction_value = 0;
+  cash_ctrl.payment_total = 0;
+  cash_ctrl.total_pay = 0;
+  cash_ctrl.money_change = 0;
+  
+  cash_ctrl.setMoneyChange = function(){
+    cash_ctrl.money_change = 0;
+    if (cash_ctrl.payment_total > cash_ctrl.total_pay){
+      cash_ctrl.money_change = (
+        parseFloat(cash_ctrl.payment_total) - parseFloat(cash_ctrl.total_pay)
+      ).toFixed(2);
+    }
+  };
+  
+  cash_ctrl.setTotalPay = function(){
+    cash_ctrl.total_pay = (
+      parseFloat(cash_ctrl.subTotalProducts) - parseFloat(cash_ctrl.deduction_value)
+    ).toFixed(2);
+  };
+  
   $scope.onDeductionChange = function() {
-      console.log('onDeductionChange');
+    console.log('onDeductionChange');
+    cash_ctrl.deduction_value = (
+      parseFloat(cash_ctrl.subTotalProducts) * parseFloat(cash_ctrl.sell.deduction)
+    ).toFixed(2);
+    cash_ctrl.setTotalPay();
+    cash_ctrl.setMoneyChange();
   };
   
 
@@ -364,11 +421,12 @@ angular.module( 'vrerpsys' )
     });
   };
 
-  $('#plotsModal').on('hide.bs.modal', function(e){
+  $('#plotsModal').on('hide.bs.modal', function(evt){
     console.log('dismiss modal');
     cash_ctrl.newPayment.value = 0;
     cash_ctrl.newPayment.plots.forEach(function(plot) {
-      cash_ctrl.newPayment.value = cash_ctrl.newPayment.value + plot.ploted_value;
+      console.log(plot);
+      cash_ctrl.newPayment.value += parseFloat(plot.ploted_value);
     });
     cash_ctrl.newPayment.plots_amount = cash_ctrl.newPayment.plots.length;
     pushPayment();
@@ -387,9 +445,9 @@ angular.module( 'vrerpsys' )
   };
   
   cash_ctrl.submit = function(){
-    
+//      console.log('SUBMIT');
     cash_ctrl.sell.products = $scope.sell_products;
-    cash_ctrl.sell.payments = $scope.payments;
+//    cash_ctrl.sell.payments = $scope.payments;
     
     if (cash_ctrl.can_submit()){
         console.log('SUBMIT');
