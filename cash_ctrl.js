@@ -3,6 +3,7 @@ angular.module( 'vrerpsys' )
   $state,
   $interval,
   $scope,
+  $window,
   $http,
   $rootScope,
   $stateParams,
@@ -28,7 +29,13 @@ angular.module( 'vrerpsys' )
   cash_ctrl.subTotalProducts = 0;
   cash_ctrl.post_url = 'api/sales/';
   $scope.sell_products = [];
+  $scope.sell_payments = [];
   $scope.payments = [];
+  $scope.salePrint = '';
+  cash_ctrl.deduction_value = 0;
+  cash_ctrl.payment_total = 0;
+  cash_ctrl.total_pay = 0;
+  cash_ctrl.money_change = 0;
   
   console.log(printer.getDefaultPrinterName());
   console.log(printer.getDefaultPrinterName());
@@ -45,17 +52,12 @@ angular.module( 'vrerpsys' )
   Rodapé entra aqui! 
 
   ` + '\n\n';
-  $scope.salePrint = '';
-  
-  
-  
   
   cash_ctrl.createSalePrint = function(){
     var salePrint = [];
     charCodeLatina(salePrint);
     bold(salePrint, printHeader);
     lineFeed(salePrint, 2);
-    
     
     var t = [];
     t.push([ "Cod:", "Prod:", "qtd:", "Unid:" , "Total:" ]);
@@ -156,17 +158,6 @@ angular.module( 'vrerpsys' )
     DTColumnDefBuilder.newColumnDef( 2 ).notSortable(),
     DTColumnDefBuilder.newColumnDef( 3 ).notSortable()
   ];
-    
-//  cash_ctrl.select_config = {
-//    'options': cash_ctrl.products,
-//    'placeholder': 'Digite um código ou um produto',
-//    'show_fields': [ 'description', 'code' ],
-//    'filter_fields': [ 'description', 'code' ],
-//    'out_fields': [ 'id' ],
-//    'min_checkbox': 0,
-//    'multiple': true,
-//    'filter_mode': 'contains'
-//  };
   
   cash_ctrl.get_clients = function ( ) {
     var get_clients = function () {
@@ -324,8 +315,8 @@ angular.module( 'vrerpsys' )
 
   function pushPayment() {
     console.log('push payment');
-    cash_ctrl.sell.payments.push({
-      'id': cash_ctrl.sell.payments.length+1,
+    $scope.sell_payments.push({
+      'id': $scope.sell_payments.length+1,
       'mode': cash_ctrl.newPayment.mode,
       'plots_amount': cash_ctrl.newPayment.plots_amount || 1,
       'value': cash_ctrl.newPayment.value,
@@ -333,60 +324,8 @@ angular.module( 'vrerpsys' )
     });
     cash_ctrl.newPayment = {};
     cash_ctrl.payment_total = 0;
-    angular.forEach(cash_ctrl.sell.payments, function(payment){
-      cash_ctrl.payment_total += parseFloat(payment.value);
-    });
-    cash_ctrl.setMoneyChange();
+    
   };
-
-  cash_ctrl.addPayment = function(){
-    console.log('Add payment');
-    cash_ctrl.newPayment.plots = [];
-    mode = cash_ctrl.newPayment.mode; 
-    if(mode == 'CHP' || mode == 'CP' || mode == 'VP'){
-      $('#plotsModal').modal('show');
-    }else{
-      pushPayment();
-    }
-  };
-  
-  $scope.$watchCollection('sell_products', function(newValue, oldValue){
-      console.log('Product collection changed');
-      if(newValue !== oldValue){
-        console.log('old != new');
-        cash_ctrl.subTotalProducts = 0; 
-        angular.forEach($scope.sell_products, function(product){
-          console.log(product);
-          console.log(parseFloat(product.price_value));
-          console.log(product.amount);
-          cash_ctrl.subTotalProducts += (parseFloat(product.price_value) * parseFloat(product.amount));
-        });
-        
-        console.log(cash_ctrl.subTotalProducts);
-        
-      }
-  });
-  
-  $scope.onParcelChange = function (){
-    console.log('onparcelchange');
-    var date = new Date();
-    var parcel = (parseFloat(cash_ctrl.newPayment.value) / parseFloat(cash_ctrl.parcel_length)).toFixed(2);
-      console.log(cash_ctrl.parcel_length);
-      console.log(cash_ctrl.newPayment.value);
-      console.log(parcel);
-    for( var i = 0; i < cash_ctrl.parcel_length; i++){
-      date.setMonth(date.getMonth() + 1)
-      cash_ctrl.newPayment.plots.push({
-        'date': new Date(date.toDateString()),
-        'plot': cash_ctrl.newPayment.plots.length+1,
-        'ploted_value': parseFloat(parcel)
-      });
-    }
-  };
-  cash_ctrl.deduction_value = 0;
-  cash_ctrl.payment_total = 0;
-  cash_ctrl.total_pay = 0;
-  cash_ctrl.money_change = 0;
   
   cash_ctrl.setMoneyChange = function(){
     cash_ctrl.money_change = 0;
@@ -402,6 +341,76 @@ angular.module( 'vrerpsys' )
       parseFloat(cash_ctrl.subTotalProducts) - parseFloat(cash_ctrl.deduction_value)
     ).toFixed(2);
   };
+
+  cash_ctrl.setPaymentTotal = function(){
+    console.log('setPaymentTotal');
+    cash_ctrl.payment_total = 0;
+    angular.forEach($scope.sell_payments, function(payment){
+      console.log(payment);
+      cash_ctrl.payment_total += parseFloat(payment.value);
+    });
+  };
+
+  cash_ctrl.addPayment = function(){
+    console.log('Add payment');
+    cash_ctrl.newPayment.plots = [];
+    mode = cash_ctrl.newPayment.mode; 
+    if(mode == 'CHP' || mode == 'CP' || mode == 'VP'){
+      $('#plotsModal').modal('show');
+    }else{
+      pushPayment();
+    }
+  };
+  
+  $scope.$watchCollection('sell_payments', function(newValue, oldValue){
+    if(newValue !== oldValue){
+      console.log('Payment collection changed');
+      cash_ctrl.setPaymentTotal();
+      cash_ctrl.setMoneyChange();
+    }
+  });
+  
+  $scope.$watchCollection('sell_products', function(newValue, oldValue){
+      if(newValue !== oldValue){
+        console.log('Product collection changed');
+        console.log('old != new');
+        cash_ctrl.subTotalProducts = 0; 
+        angular.forEach($scope.sell_products, function(product){
+          console.log(product);
+          console.log(parseFloat(product.price_value));
+          console.log(product.amount);
+          cash_ctrl.subTotalProducts += (parseFloat(product.price_value) * parseFloat(product.amount));
+        });
+        
+        console.log(cash_ctrl.subTotalProducts);
+        
+      }
+  });
+  
+  var delayTimer;
+  $scope.onParcelChange = function (){
+    if(delayTimer){
+      
+      $window.clearTimeout(delayTimer);
+    }
+    delayTimer = $window.setTimeout(function() {
+      console.log('onparcelchange');
+      var date = new Date();
+      var parcel = (parseFloat(cash_ctrl.newPayment.value) / parseFloat(cash_ctrl.parcel_length)).toFixed(2);
+        console.log(cash_ctrl.parcel_length);
+        console.log(cash_ctrl.newPayment.value);
+        console.log(parcel);
+      for( var i = 0; i < cash_ctrl.parcel_length; i++){
+        date.setMonth(date.getMonth() + 1)
+        cash_ctrl.newPayment.plots.push({
+          'date': new Date(date.toDateString()),
+          'plot': cash_ctrl.newPayment.plots.length+1,
+          'ploted_value': parseFloat(parcel)
+        });
+      }
+      $scope.$apply();
+    }, 1000);
+  };
   
   $scope.onDeductionChange = function() {
     console.log('onDeductionChange');
@@ -411,7 +420,6 @@ angular.module( 'vrerpsys' )
     cash_ctrl.setTotalPay();
     cash_ctrl.setMoneyChange();
   };
-  
 
   cash_ctrl.addPlot = function(){
     cash_ctrl.newPayment.plots.push({
@@ -436,7 +444,7 @@ angular.module( 'vrerpsys' )
   
   cash_ctrl.can_submit = function(){
     var can_submit = false;
-    if ($scope.sell_products.length > 0 && $scope.payments.length > 0 ){
+    if ($scope.sell_products.length > 0 && $scope.sell_payments.length > 0 ){
       can_submit = true; 
     }
     
@@ -447,7 +455,7 @@ angular.module( 'vrerpsys' )
   cash_ctrl.submit = function(){
 //      console.log('SUBMIT');
     cash_ctrl.sell.products = $scope.sell_products;
-//    cash_ctrl.sell.payments = $scope.payments;
+    cash_ctrl.sell.payments = $scope.sell_payments;
     
     if (cash_ctrl.can_submit()){
         console.log('SUBMIT');
