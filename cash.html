@@ -196,6 +196,10 @@
               <td class="text-right">{{ cash_ctrl.money_change | currency:"R$" }}</td>
             </tr>
             <tr>
+              <td>FALTANDO:</td>
+              <td class="text-right">{{ cash_ctrl.money_missing | currency:"R$" }}</td>
+            </tr>
+            <tr>
               <td>TOTAL A PAGAR:</td>
               <td class="text-right">{{ cash_ctrl.total_pay | currency:"R$" }}</td>
             </tr>
