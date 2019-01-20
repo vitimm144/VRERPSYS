@@ -3,7 +3,7 @@
 
     <div class="bar-title row">
       <div class="col-xs-6">
-        <h1>Caixa</h1>
+          <h1>Caixa</h1> <i class="fas fa-chart-area" ng-click="cash_ctrl.show_resume_cash()"></i>
       </div>
     </div>
 
@@ -265,6 +265,52 @@
                   ng-click="cash_ctrl.newPayment.plots.splice($index, 1)">
                   <i class="fa fa-trash danger"></i>
               </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" >Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="resumeModal" tabindex="-1" role="dialog" aria-labelledby="resumeModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="resumeModalLabel">Resumo de vendas</h4>
+        
+      </div>
+      <div class="modal-body">
+<!--        <label> Adicionar manualmente: </label>-->
+          <table class="table">
+         
+          <tbody>
+            <tr>
+              <td>Total Dinheiro</td>
+              <td>{{ cash_ctrl.total_money | currency: "R$" }}</td>
+            </tr>
+            <tr>
+              <td>Total Ch. à Vista</td>
+              <td>{{ cash_ctrl.total_chv | currency: "R$" }}</td>
+            </tr>
+            <tr>
+              <td>Total Ch. Pré</td>
+              <td>{{ cash_ctrl.total_chp | currency: "R$"}}</td>
+            </tr>
+            <tr>
+              <td>Total C. Crédito</td>
+              <td>{{ cash_ctrl.total_cc | currency: "R$" }}</td>
+            </tr>
+            <tr>
+              <td>Total C. Débito</td>
+              <td>{{ cash_ctrl.total_cd | currency: "R$" }}</td>
+            </tr>
+            <tr>
+              <td>Total Geral</td>
+              <td>{{ cash_ctrl.total_resume | currency: "R$" }}</td>
             </tr>
           </tbody>
         </table>

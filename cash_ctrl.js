@@ -13,7 +13,7 @@ angular.module( 'vrerpsys' )
 ) {
   var cash_ctrl = this;
   var fs = require('fs');
-  var printer = require('printer');
+//  var printer = require('printer');
   var table = require('text-table');
   var headers = {
     'headers': {
@@ -37,58 +37,64 @@ angular.module( 'vrerpsys' )
   cash_ctrl.total_pay = 0;
   cash_ctrl.money_change = 0;
   cash_ctrl.money_missing = 0;
+  cash_ctrl.total_money = 0;
+  cash_ctrl.total_chv = 0;
+  cash_ctrl.total_chp = 0;
+  cash_ctrl.total_cc = 0;
+  cash_ctrl.total_cd = 0;
+  cash_ctrl.total_resume = 0;
   
-  console.log(printer.getDefaultPrinterName());
-  console.log(printer.getDefaultPrinterName());
-  console.log('SUPORTED PRINT FORMATS');
-  console.log(printer.getSupportedPrintFormats());
-  printHeader = `
-
-  Cabeçalho entra aqui! 
-
-  `  + '\n\n';
-  
-  printFooter = `
-
-  Rodapé entra aqui! 
-
-  ` + '\n\n';
+//  console.log(printer.getDefaultPrinterName());
+//  console.log(printer.getDefaultPrinterName());
+//  console.log('SUPORTED PRINT FORMATS');
+//  console.log(printer.getSupportedPrintFormats());
+//  printHeader = `
+//
+//  Cabeçalho entra aqui! 
+//
+//  `  + '\n\n';
+//  
+//  printFooter = `
+//
+//  Rodapé entra aqui! 
+//
+//  ` + '\n\n';
   
   cash_ctrl.createSalePrint = function(){
     var salePrint = [];
-    charCodeLatina(salePrint);
-    bold(salePrint, printHeader);
-    lineFeed(salePrint, 2);
-    
-    var t = [];
-    t.push([ "Cod:", "Prod:", "qtd:", "Unid:" , "Total:" ]);
-    
-    angular.forEach($scope.sell_products, function(product){
-        console.log(product);
-        total = (parseFloat(product.price_value) * parseFloat(product.amount))
-        total = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        price = parseFloat(product.price_value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        t.push([product.code, product.description, product.amount, price, total])
-    });
-    
-    console.log(t);
-    tproduct = table(t, {align:[1, 1, 1, 1, 1]});
-    
-    normal(salePrint, tproduct)
-    lineFeed(salePrint, 1);
-    alignRight(salePrint);
-    underline2(
-      salePrint,
-      "Total: " + parseFloat(cash_ctrl.subTotalProducts).toLocaleString(
-        'pt-BR',
-        { style: 'currency', currency: 'BRL' }
-      )
-    )
-    
-    lineFeed(salePrint, 2);
-    alignCenter(salePrint)
-    bold(salePrint, printFooter);
-    fullCut(salePrint)
+//    charCodeLatina(salePrint);
+//    bold(salePrint, printHeader);
+//    lineFeed(salePrint, 2);
+//    
+//    var t = [];
+//    t.push([ "Cod:", "Prod:", "qtd:", "Unid:" , "Total:" ]);
+//    
+//    angular.forEach($scope.sell_products, function(product){
+//        console.log(product);
+//        total = (parseFloat(product.price_value) * parseFloat(product.amount))
+//        total = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+//        price = parseFloat(product.price_value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+//        t.push([product.code, product.description, product.amount, price, total])
+//    });
+//    
+//    console.log(t);
+//    tproduct = table(t, {align:[1, 1, 1, 1, 1]});
+//    
+//    normal(salePrint, tproduct)
+//    lineFeed(salePrint, 1);
+//    alignRight(salePrint);
+//    underline2(
+//      salePrint,
+//      "Total: " + parseFloat(cash_ctrl.subTotalProducts).toLocaleString(
+//        'pt-BR',
+//        { style: 'currency', currency: 'BRL' }
+//      )
+//    )
+//    
+//    lineFeed(salePrint, 2);
+//    alignCenter(salePrint)
+//    bold(salePrint, printFooter);
+//    fullCut(salePrint)
     
     return salePrint;
   };
@@ -383,6 +389,71 @@ angular.module( 'vrerpsys' )
     }
   };
   
+  cash_ctrl.show_resume_cash = function(){
+    console.log('show resume cash');
+    cash_ctrl.total_money = 0;
+    cash_ctrl.total_chv = 0;
+    cash_ctrl.total_chp = 0;
+    cash_ctrl.total_cc = 0;
+    cash_ctrl.total_cd = 0;
+    cash_ctrl.total_resume = 0;
+      
+    var date = new Date();
+    var url = 'http://' + $scope.login_ctrl.host +
+              '/api/sales?created_at=' +
+              date.toLocaleDateString().replace(/\//g,'-');
+    console.log(url);
+    $http.get(url, headers).then(
+        function ( response ) {
+          console.log( 'Sales get OK', response )
+                            
+          var sells = response.data.results;
+          angular.forEach(sells, function(sell){
+            angular.forEach(sell.payments, function(pay){
+              console.log(pay.value);
+              cash_ctrl.total_resume += parseFloat(pay.value);
+              switch(pay.mode){
+                case "D":
+                case "CA":
+                  cash_ctrl.total_cd += parseFloat(pay.value);
+                  break;
+
+                case "CP":
+                  cash_ctrl.total_cc += parseFloat(pay.value);
+                  break;
+
+                case "A":
+                  cash_ctrl.total_money += parseFloat(pay.value);
+                  break;
+
+                case "CHA":
+                  cash_ctrl.total_chv += parseFloat(pay.value);
+                  break;
+
+                case "CHP":
+                  cash_ctrl.total_chp += parseFloat(pay.value);
+                  break;
+
+                case "VP":
+                  break;
+                case "V":
+                  break;
+              }
+            });
+          });
+          console.log(cash_ctrl.total_resume);
+          $('#resumeModal').modal('show');
+          
+        }, function ( response ) {
+          console.log( 'Sales get FAIL', response );
+          if ( response.status == 401 ) {
+            $scope.login_ctrl.logout();
+          }
+        }
+      );
+      
+  };
+  
   $scope.$watchCollection('sell_payments', function(newValue, oldValue){
     if(newValue !== oldValue){
       console.log('Payment collection changed');
@@ -476,6 +547,10 @@ angular.module( 'vrerpsys' )
     pushPayment();
     $window.setTimeout(function() {$scope.$apply();},1)
     console.log(cash_ctrl.sell);
+  });
+  
+  $('#resumeModal').on('hide.bs.modal', function(evt){
+    console.log('dismiss resume modal');
   });
   
   cash_ctrl.can_submit = function(){
