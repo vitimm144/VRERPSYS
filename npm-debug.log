@@ -1,0 +1,44 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'start' ]
+2 info using npm@3.5.2
+3 info using node@v8.10.0
+4 verbose run-script [ 'prestart', 'start', 'poststart' ]
+5 info lifecycle vrerp_sys@0.0.1~prestart: vrerp_sys@0.0.1
+6 silly lifecycle vrerp_sys@0.0.1~prestart: no script for prestart, continuing
+7 info lifecycle vrerp_sys@0.0.1~start: vrerp_sys@0.0.1
+8 verbose lifecycle vrerp_sys@0.0.1~start: unsafe-perm in lifecycle true
+9 verbose lifecycle vrerp_sys@0.0.1~start: PATH: /usr/share/npm/bin/node-gyp-bin:/mnt/c/Users/Victor/devel/vrerpsys/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/Program Files/WindowsApps/CanonicalGroupLimited.UbuntuonWindows_1804.2018.817.0_x64__79rhkp1fndgsc:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/ProgramData/Oracle/Java/javapath:/mnt/c/Windows/System32:/mnt/c/Windows:/mnt/c/Windows/System32/wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Windows/System32/OpenSSH:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/dotnet:/mnt/c/Program Files/Microsoft SQL Server/130/Tools/Binn:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/Git/mingw64/bin:/mnt/c/Program Files/Git/usr/bin:/mnt/c/Program Files/PuTTY:/mnt/c/Python27:/mnt/c/Users/Victor/.dnx/bin:/mnt/c/Program Files/Microsoft DNX/Dnvm:/mnt/c/Program Files/nodejs:/mnt/c/Program Files (x86)/Yarn/bin:/mnt/c/Users/Victor/AppData/Local/Programs/Python/Python37-32/Scripts:/mnt/c/Users/Victor/AppData/Local/Programs/Python/Python37-32:/mnt/c/Python27:/mnt/c/Users/Victor/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files/JetBrains/PyCharm Community Edition 2018.3.2/bin:/mnt/c/Users/Victor/AppData/Local/Yarn/bin:/snap/bin
+10 verbose lifecycle vrerp_sys@0.0.1~start: CWD: /mnt/c/Users/Victor/devel/vrerpsys
+11 silly lifecycle vrerp_sys@0.0.1~start: Args: [ '-c', 'electron .' ]
+12 info lifecycle vrerp_sys@0.0.1~start: Failed to exec start script
+13 verbose stack Error: vrerp_sys@0.0.1 start: `electron .`
+13 verbose stack spawn ENOENT
+13 verbose stack     at ChildProcess.<anonymous> (/usr/share/npm/lib/utils/spawn.js:17:16)
+13 verbose stack     at emitTwo (events.js:126:13)
+13 verbose stack     at ChildProcess.emit (events.js:214:7)
+13 verbose stack     at maybeClose (internal/child_process.js:925:16)
+13 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)
+14 verbose pkgid vrerp_sys@0.0.1
+15 verbose cwd /mnt/c/Users/Victor/devel/vrerpsys
+16 error Linux 4.4.0-17763-Microsoft
+17 error argv "/usr/bin/node" "/usr/bin/npm" "start"
+18 error node v8.10.0
+19 error npm  v3.5.2
+20 error file sh
+21 error code ELIFECYCLE
+22 error errno ENOENT
+23 error syscall spawn
+24 error vrerp_sys@0.0.1 start: `electron .`
+24 error spawn ENOENT
+25 error Failed at the vrerp_sys@0.0.1 start script 'electron .'.
+25 error Make sure you have the latest version of node.js and npm installed.
+25 error If you do, this is most likely a problem with the vrerp_sys package,
+25 error not with npm itself.
+25 error Tell the author that this fails on your system:
+25 error     electron .
+25 error You can get information on how to open an issue for this project with:
+25 error     npm bugs vrerp_sys
+25 error Or if that isn't available, you can get their info via:
+25 error     npm owner ls vrerp_sys
+25 error There is likely additional logging output above.
+26 verbose exit [ 1, true ]

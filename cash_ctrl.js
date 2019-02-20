@@ -13,7 +13,7 @@ angular.module( 'vrerpsys' )
 ) {
   var cash_ctrl = this;
   var fs = require('fs');
-//  var printer = require('printer');
+  var printer = require('printer');
   var table = require('text-table');
   var headers = {
     'headers': {
@@ -43,58 +43,59 @@ angular.module( 'vrerpsys' )
   cash_ctrl.total_cc = 0;
   cash_ctrl.total_cd = 0;
   cash_ctrl.total_resume = 0;
+  cash_ctrl.validade_product_length = true;
   
-//  console.log(printer.getDefaultPrinterName());
-//  console.log(printer.getDefaultPrinterName());
-//  console.log('SUPORTED PRINT FORMATS');
-//  console.log(printer.getSupportedPrintFormats());
-//  printHeader = `
-//
-//  Cabeçalho entra aqui! 
-//
-//  `  + '\n\n';
-//  
-//  printFooter = `
-//
-//  Rodapé entra aqui! 
-//
-//  ` + '\n\n';
+  console.log(printer.getDefaultPrinterName());
+  console.log(printer.getDefaultPrinterName());
+  console.log('SUPORTED PRINT FORMATS');
+  console.log(printer.getSupportedPrintFormats());
+  printHeader = `
+
+  Cabeçalho entra aqui! 
+
+  `  + '\n\n';
+  
+  printFooter = `
+
+  Rodapé entra aqui! 
+
+  ` + '\n\n';
   
   cash_ctrl.createSalePrint = function(){
     var salePrint = [];
-//    charCodeLatina(salePrint);
-//    bold(salePrint, printHeader);
-//    lineFeed(salePrint, 2);
-//    
-//    var t = [];
-//    t.push([ "Cod:", "Prod:", "qtd:", "Unid:" , "Total:" ]);
-//    
-//    angular.forEach($scope.sell_products, function(product){
-//        console.log(product);
-//        total = (parseFloat(product.price_value) * parseFloat(product.amount))
-//        total = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-//        price = parseFloat(product.price_value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-//        t.push([product.code, product.description, product.amount, price, total])
-//    });
-//    
-//    console.log(t);
-//    tproduct = table(t, {align:[1, 1, 1, 1, 1]});
-//    
-//    normal(salePrint, tproduct)
-//    lineFeed(salePrint, 1);
-//    alignRight(salePrint);
-//    underline2(
-//      salePrint,
-//      "Total: " + parseFloat(cash_ctrl.subTotalProducts).toLocaleString(
-//        'pt-BR',
-//        { style: 'currency', currency: 'BRL' }
-//      )
-//    )
-//    
-//    lineFeed(salePrint, 2);
-//    alignCenter(salePrint)
-//    bold(salePrint, printFooter);
-//    fullCut(salePrint)
+    charCodeLatina(salePrint);
+    bold(salePrint, printHeader);
+    lineFeed(salePrint, 2);
+    
+    var t = [];
+    t.push([ "Cod:", "Prod:", "qtd:", "Unid:" , "Total:" ]);
+    
+    angular.forEach($scope.sell_products, function(product){
+        console.log(product);
+        total = (parseFloat(product.price_value) * parseFloat(product.amount))
+        total = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        price = parseFloat(product.price_value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        t.push([product.code, product.description, product.amount, price, total])
+    });
+    
+    console.log(t);
+    tproduct = table(t, {align:[1, 1, 1, 1, 1]});
+    
+    normal(salePrint, tproduct)
+    lineFeed(salePrint, 1);
+    alignRight(salePrint);
+    underline2(
+      salePrint,
+      "Total: " + parseFloat(cash_ctrl.subTotalProducts).toLocaleString(
+        'pt-BR',
+        { style: 'currency', currency: 'BRL' }
+      )
+    )
+    
+    lineFeed(salePrint, 2);
+    alignCenter(salePrint)
+    bold(salePrint, printFooter);
+    fullCut(salePrint)
     
     return salePrint;
   };
@@ -103,9 +104,13 @@ angular.module( 'vrerpsys' )
     var info = cash_ctrl.createSalePrint(); 
     console.log(info);
 //    var info = 'texto'; 
+//    info = '\x4a\x00' + " Teste de impressao com string " + '\x4a\x00' + 
     printer.printDirect({
       data: new Buffer(info),
+//      data: info,
       type: 'RAW',
+//      type: "RAW [FF auto]",
+//      type: "TEXT",
       success: function (jobID) {
         console.log("ID: " + jobID);
       },
@@ -326,7 +331,7 @@ angular.module( 'vrerpsys' )
       'id': $scope.sell_payments.length+1,
       'mode': cash_ctrl.newPayment.mode,
       'plots_amount': cash_ctrl.newPayment.plots_amount || 1,
-      'value': cash_ctrl.newPayment.value,
+      'value': parseFloat(cash_ctrl.newPayment.value).toFixed(2),
       'plots': cash_ctrl.newPayment.plots
     });
     cash_ctrl.newPayment = {};
@@ -400,8 +405,8 @@ angular.module( 'vrerpsys' )
       
     var date = new Date();
     var url = 'http://' + $scope.login_ctrl.host +
-              '/api/sales?created_at=' +
-              date.toLocaleDateString().replace(/\//g,'-');
+              '/api/sales?search=' +
+              date.toLocaleDateString();
     console.log(url);
     $http.get(url, headers).then(
         function ( response ) {
@@ -507,7 +512,7 @@ angular.module( 'vrerpsys' )
       
     }, 1000);
   };
-  
+    
   var delayDeduction;
   
   $scope.onDeductionChange = function() {
@@ -554,15 +559,52 @@ angular.module( 'vrerpsys' )
   });
   
   cash_ctrl.can_submit = function(){
+    var validate_product_length = false;
     var can_submit = false;
     if ($scope.sell_products.length > 0 && $scope.sell_payments.length > 0 ){
-      can_submit = true; 
+      validate_product_length = true; 
+      cash_ctrl.validade_product_length = true;
+    }else{
+      // mostrar validação
+        console.log('product length error');
+        cash_ctrl.validade_product_length = false;
     }
     
-    return can_submit;
+    
+    
+    return can_submit && validate_product_length;
     
   };
-  
+  cash_ctrl.show_exchange_view = function (){
+      console.log('show exchange view');
+    var notification_conf = {
+      'message': ' <span >Teste</span>',
+//      'icon': path.join(
+//        __dirname,
+//        'assets/images/notification_128x128.png'
+//      ),
+      'buttons': [
+       'Ignore',
+        'Reject' 
+      ],
+      'duration': 6,
+      'vertical': false,
+      'flat': true
+    };
+//    let myNotification = new Notification('Título', {
+//      body: 'Lorem Ipsum Dolor Sit Amet'
+//    });
+//
+//    myNotification.onclick = function(){
+//      console.log('Notificação clicada');
+//    }
+      notifier.notify(
+        "teste",
+        notification_conf
+      );
+      
+    
+  };
   cash_ctrl.submit = function(){
 //      console.log('SUBMIT');
     cash_ctrl.sell.products = $scope.sell_products;
@@ -579,15 +621,15 @@ angular.module( 'vrerpsys' )
         headers
       ).then(
         function ( response ) {
-          console.log( 'Stock transfer post OK', response )
-          $rootScope.$broadcast( 'Stock_refresh' );
-          $state.go( 'contacts.stock' );
+          console.log( 'Sale post OK', response )
+          $rootScope.$broadcast( 'Cash_refresh' );
+          $state.go( 'contacts.cash' );
         }, function ( response ) {
-          console.log( 'Stock transfer  post FAIL', response )
+          console.log( 'Sale  post FAIL', response )
           if ( response.status == 401 ) {
             $scope.login_ctrl.logout();
           } else if ( response.status == 400 ) {
-            add_error( 'Erro ao transferir produto!' );
+            add_error( 'Erro salvar venda!' );
           }
         }
       );

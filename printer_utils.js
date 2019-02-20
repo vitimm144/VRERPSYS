@@ -13,7 +13,9 @@ String.prototype.toBytes = function() {
 };
 
 function charCodeLatina(doc){
-  doc.push(0x1b, 0x52, 0x0C);
+  doc.push(0x1B, 0x52, 0x12);
+//  doc.push(0x1d, 0xF9, 0x37, 0);
+//  doc.push(0x1B, 0x74, 6);
 }
 
 function fontA(doc) {
@@ -61,23 +63,29 @@ function underline(doc, text) {
 }
 
 function underline2(doc, text) {
-    doc.push(0x1b, 0x2d, 0x02);
+    doc.push(0x1B, 0x2D, 1);
     normal(doc, text);
-    doc.push(0x1b, 0x2d, 0x00);
+    doc.push(0x1B, 0x2D, 0);
 }
 
 function bold(doc, text) {
-    doc.push(0x1b, 0x45, 0x01);
+    doc.push(0x1B, 0x45);
     normal(doc, text);
-    doc.push(0x1b, 0x45, 0x00);
+    doc.push(0x1B, 0x46);
 }
 
 function lineFeed(doc, length) {
-    doc.push(0x01B, 0x64, length || 1);
+//    doc.push(0x01B, 0x64, length || 1);
+    doc.push(0x1B, 0x4A, length || 1);
+//    doc.push(0x4a,0x00);
 }
 
 function fullCut(doc) {
     lineFeed(doc, 5);
-    doc.push(0x1d, 0x56, 0x00);
+//    doc.push(0x1d, 0x56, 0x00);
+//    doc.push('\x1d\x56\x00');
+    doc.push(0x1B, 0x69);
+
+//    doc.push(0x1b, 0x64, 0x02);
 }
 
