@@ -63,7 +63,10 @@ angular.module( 'vrerpsys' )
   
   cash_ctrl.createSalePrint = function(){
     var salePrint = [];
+//    printUserConfig(salePrint);
     charCodeLatina(salePrint);
+    setPrinterLanguage(salePrint, 1);
+//    printUserConfig(salePrint);
     bold(salePrint, printHeader);
     lineFeed(salePrint, 2);
     
@@ -82,11 +85,27 @@ angular.module( 'vrerpsys' )
     tproduct = table(t, {align:[1, 1, 1, 1, 1]});
     
     normal(salePrint, tproduct)
-    lineFeed(salePrint, 1);
+    lineFeed(salePrint, 4);
     alignRight(salePrint);
     underline2(
       salePrint,
-      "Total: " + parseFloat(cash_ctrl.subTotalProducts).toLocaleString(
+      "SubTotal: " + parseFloat(cash_ctrl.subTotalProducts).toLocaleString(
+        'pt-BR',
+        { style: 'currency', currency: 'BRL' }
+      )
+    );
+    lineFeed(salePrint, 1);
+    underline2(
+      salePrint,
+      "Desconto: " + parseFloat(cash_ctrl.deduction_value).toLocaleString(
+        'pt-BR',
+        { style: 'currency', currency: 'BRL' }
+      )
+    );
+    lineFeed(salePrint, 1);
+    underline2(
+      salePrint,
+      "Total: " + parseFloat(cash_ctrl.total_pay).toLocaleString(
         'pt-BR',
         { style: 'currency', currency: 'BRL' }
       )
@@ -559,8 +578,12 @@ angular.module( 'vrerpsys' )
   });
   
   cash_ctrl.can_submit = function(){
+    
+      console.log('can_submit');
     var validate_product_length = false;
-    var can_submit = false;
+    var validate_payment_length = false;
+    var validate_payment_match = false;
+    
     if ($scope.sell_products.length > 0 && $scope.sell_payments.length > 0 ){
       validate_product_length = true; 
       cash_ctrl.validade_product_length = true;
@@ -572,47 +595,70 @@ angular.module( 'vrerpsys' )
     
     
     
-    return can_submit && validate_product_length;
+    return validate_product_length;
     
   };
-  cash_ctrl.show_exchange_view = function (){
-      console.log('show exchange view');
+  cash_ctrl.show_notification = function(message){
     var notification_conf = {
-      'message': ' <span >Teste</span>',
-//      'icon': path.join(
-//        __dirname,
-//        'assets/images/notification_128x128.png'
-//      ),
-      'buttons': [
-       'Ignore',
-        'Reject' 
-      ],
-      'duration': 6,
+      'message': '',
+      'duration': 6000,
       'vertical': false,
       'flat': true
     };
-//    let myNotification = new Notification('Título', {
-//      body: 'Lorem Ipsum Dolor Sit Amet'
-//    });
-//
-//    myNotification.onclick = function(){
-//      console.log('Notificação clicada');
-//    }
-      notifier.notify(
-        "teste",
-        notification_conf
-      );
+
+    notifier.notify(
+      message,
+      notification_conf
+    );
       
-    
   };
+  
+  cash_ctrl.show_exchange_view = function (){
+      console.log('show exchange view');
+      cash_ctrl.show_notification("Venda efetuada com sucesso");
+  };
+  
+  cash_ctrl.log_sell = function(sell, status){
+      console.log('log sell');
+    var date = new Date();
+    var str_today = date.toLocaleDateString('pt-br').replace(/\//g, "-");
+      console.log(str_today);
+    var dir = 'log_vendas';
+    var dir_today = dir+ '/' + str_today;
+    var dir_today_err = dir+ '/' + str_today + '_err';
+      console.log(dir_today);
+    // Criando pasta de log principal caso ainda não exista
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+    // Criando pasta de log do dia caso não tenha sido criada
+    if (!fs.existsSync(dir_today)){
+        fs.mkdirSync(dir_today);
+    }
+    
+    // Criando pasta de log de erros do dia caso não tenha sido criada
+    if (!fs.existsSync(dir_today_err)){
+        fs.mkdirSync(dir_today_err);
+    }
+    
+    var dst = status ? dir_today: dir_today_err;
+    var timestamp = + new Date();
+    dst = dst + '/' + timestamp.toString();
+    fs.writeFile(dst, JSON.stringify(sell), function(err){
+      if (err) throw err;
+      log.info('Writting sell in log => ' +  JSON.stringify(sell));
+    });
+       
+  };
+
   cash_ctrl.submit = function(){
-//      console.log('SUBMIT');
+    console.log('SUBMIT');
     cash_ctrl.sell.products = $scope.sell_products;
     cash_ctrl.sell.payments = $scope.sell_payments;
     
     if (cash_ctrl.can_submit()){
-        console.log('SUBMIT');
-        console.log(cash_ctrl.sell);
+//        console.log('SUBMIT');
+      console.log(cash_ctrl.sell);
       $http.post(
         'http://' +
         $scope.login_ctrl.host +
@@ -623,9 +669,12 @@ angular.module( 'vrerpsys' )
         function ( response ) {
           console.log( 'Sale post OK', response )
           $rootScope.$broadcast( 'Cash_refresh' );
+          cash_ctrl.log_sell(response.data, true);
+          cash_ctrl.show_notification("Venda efetuada com sucesso")
           $state.go( 'contacts.cash' );
         }, function ( response ) {
           console.log( 'Sale  post FAIL', response )
+          cash_ctrl.show_notification("Erro ao efetuar a venda")
           if ( response.status == 401 ) {
             $scope.login_ctrl.logout();
           } else if ( response.status == 400 ) {
@@ -634,8 +683,6 @@ angular.module( 'vrerpsys' )
         }
       );
     }
-    
-    
   };
 
 });

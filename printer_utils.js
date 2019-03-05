@@ -62,6 +62,13 @@ function underline(doc, text) {
     doc.push(0x1b, 0x2d, 0x00);
 }
 
+function setPrinterLanguage(doc, ln){
+  // o parametro ln significa a linguagem
+  // ln = 0 or 30 - english
+  //ln = 1 or 31 - portuguese
+  doc.push(0x29, 0xFA, 0x01)
+}
+
 function underline2(doc, text) {
     doc.push(0x1B, 0x2D, 1);
     normal(doc, text);
@@ -72,6 +79,10 @@ function bold(doc, text) {
     doc.push(0x1B, 0x45);
     normal(doc, text);
     doc.push(0x1B, 0x46);
+}
+
+function printUserConfig(doc) {
+    doc.push(0x1D, 0xF9, 0x29, 0x30);
 }
 
 function lineFeed(doc, length) {

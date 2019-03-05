@@ -12,7 +12,8 @@ angular.module( 'vrerpsys' )
 
   stock_transfer_ctrl.transfer_form = {};
 
-  console.log('StockTransferCtrl')
+  console.log('#StockTransferCtrl#')
+  log.info('#StockTransferCtrl#')
 
   $scope.$on('$stateChangeSuccess', function(
     event,
@@ -99,10 +100,12 @@ angular.module( 'vrerpsys' )
         ).then(
           function ( response ) {
             console.log( 'Stock transfer post OK', response )
+            log.info( '#StockTransferCtrl# Stock transfer post OK', response )
             $rootScope.$broadcast( 'Stock_refresh' );
             $state.go( 'contacts.stock' );
           }, function ( response ) {
             console.log( 'Stock transfer  post FAIL', response )
+            log.info( '#StockTransferCtrl# Stock transfer  post FAIL', response )
             if ( response.status == 401 ) {
               $scope.login_ctrl.logout();
             } else if ( response.status == 400 ) {

@@ -58,6 +58,7 @@
       const path = require( 'path' );
       const url = require( 'url' );
       const ipcRenderer = electron.ipcRenderer;
+			const log = require('simple-node-logger').createSimpleLogger('vrerpsys.log');
       const notifier = require(
         path.join( __dirname, 'electron-notifications' )
       );
