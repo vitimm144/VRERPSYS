@@ -80,6 +80,18 @@ angular.module(
       }
     ).state(
       {
+        'name': 'contacts.sales',
+        'url': '/sales',
+        'views': {
+          'sales@': {
+            'templateUrl': 'sales.html',
+            'controller': 'SalesCtrl',
+            'controllerAs': 'sales_ctrl'
+          }
+        }
+      }
+    ).state(
+      {
         'name': 'contacts.cash',
         'url': '/cash',
         'views': {

@@ -618,6 +618,12 @@ angular.module( 'vrerpsys' )
       cash_ctrl.show_notification("Venda efetuada com sucesso");
   };
   
+  cash_ctrl.show_sales_view = function (){
+      console.log('show sales view');
+      $state.go( 'contacts.sales' );
+      
+  };
+  
   cash_ctrl.log_sell = function(sell, status){
       console.log('log sell');
     var date = new Date();
@@ -671,7 +677,7 @@ angular.module( 'vrerpsys' )
           $rootScope.$broadcast( 'Cash_refresh' );
           cash_ctrl.log_sell(response.data, true);
           cash_ctrl.show_notification("Venda efetuada com sucesso")
-          $state.go( 'contacts.cash' );
+          $state.go( 'contacts.sales' );
         }, function ( response ) {
           console.log( 'Sale  post FAIL', response )
           cash_ctrl.show_notification("Erro ao efetuar a venda")
