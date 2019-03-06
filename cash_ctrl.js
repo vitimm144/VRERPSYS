@@ -15,14 +15,7 @@ angular.module( 'vrerpsys' )
   var fs = require('fs');
   var printer = require('printer');
   var table = require('text-table');
-  var headers = {
-    'headers': {
-      'Authorization':'Token ' +  $scope.login_ctrl.token,
-      'X-CSRFToken': $scope.login_ctrl.token,
-      'Accept':'*/*'
-    }
-  };
-  
+  cash_ctrl.headers = {};
   cash_ctrl.dtInstance = {};
   cash_ctrl.products = [];
   cash_ctrl.products_for_sale = [];
@@ -189,13 +182,23 @@ angular.module( 'vrerpsys' )
     DTColumnDefBuilder.newColumnDef( 2 ).notSortable(),
     DTColumnDefBuilder.newColumnDef( 3 ).notSortable()
   ];
+  cash_ctrl.set_headers = function(){
+    cash_ctrl.headers = {
+      'headers': {
+        'Authorization':'Token ' +  $scope.login_ctrl.token,
+        'X-CSRFToken': $scope.login_ctrl.token,
+        'Accept':'*/*'
+      }
+    };
+  };
   
   cash_ctrl.get_clients = function ( ) {
+    cash_ctrl.set_headers();
     var get_clients = function () {
       console.log('get_clients');
       $http.get(
         'http://' + $scope.login_ctrl.host + '/api/clients/',
-        headers
+        cash_ctrl.headers
       ).then(
         function ( response ) {
           console.log( 'Client get OK', response )
@@ -223,11 +226,12 @@ angular.module( 'vrerpsys' )
   };
   
   cash_ctrl.get_employees = function ( ) {
+    cash_ctrl.set_headers();
     var get_employees = function () {
       console.log('get_employees');
       $http.get(
         'http://' + $scope.login_ctrl.host + '/api/employees/',
-        headers
+        cash_ctrl.headers
       ).then(
         function ( response ) {
           console.log( 'Employees get OK', response )
@@ -255,11 +259,12 @@ angular.module( 'vrerpsys' )
   };
   
   cash_ctrl.get_products = function ( ) {
+    cash_ctrl.set_headers();
     var get_products = function () {
       console.log('get_products');
       $http.get(
         'http://' + $scope.login_ctrl.host + '/api/products/',
-        headers
+        cash_ctrl.headers
       ).then(
         function ( response ) {
           console.log( 'Products get OK', response )
@@ -413,6 +418,10 @@ angular.module( 'vrerpsys' )
     }
   };
   
+  function pad(d) {
+    return (d < 10) ? '0' + d.toString() : d.toString();
+  }
+  
   cash_ctrl.show_resume_cash = function(){
     console.log('show resume cash');
     cash_ctrl.total_money = 0;
@@ -423,11 +432,15 @@ angular.module( 'vrerpsys' )
     cash_ctrl.total_resume = 0;
       
     var date = new Date();
+    var mm = pad(date.getMonth() + 1);
+    var dd = pad(date.getDate());
+    var yy = date.getFullYear();
+    var myDateString = yy + '-' + mm + '-' + dd; //(US)
     var url = 'http://' + $scope.login_ctrl.host +
               '/api/sales?search=' +
-              date.toLocaleDateString();
+              myDateString;
     console.log(url);
-    $http.get(url, headers).then(
+    $http.get(url, cash_ctrl.headers).then(
         function ( response ) {
           console.log( 'Sales get OK', response )
                             
@@ -658,6 +671,7 @@ angular.module( 'vrerpsys' )
   };
 
   cash_ctrl.submit = function(){
+    cash_ctrl.set_headers();
     console.log('SUBMIT');
     cash_ctrl.sell.products = $scope.sell_products;
     cash_ctrl.sell.payments = $scope.sell_payments;
@@ -670,7 +684,7 @@ angular.module( 'vrerpsys' )
         $scope.login_ctrl.host +
         cash_ctrl.post_url,
         cash_ctrl.sell,
-        headers
+        cash_ctrl.headers
       ).then(
         function ( response ) {
           console.log( 'Sale post OK', response )
