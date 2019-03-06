@@ -39,7 +39,7 @@
           <td>{{ product.product.description }}</td>
           <td>{{ product.product.size }}</td>
           <td>{{ product.amount }}</td>
-          <td>{{ product.product.products[0].value }}</td>
+          <td>{{ product.price | currency:"R$" }} </td>
           <td>{{ product.user.username }}</td>
           <td>
             <button

@@ -79,7 +79,7 @@ angular.module( 'vrerpsys' )
       $http.get(
         'http://' +
         $scope.login_ctrl.host +
-        '/api/sales/',
+        '/api/sales/?user__username=' + $scope.login_ctrl.username,
         {
           'headers': {
             'Authorization':'Token ' +  $scope.login_ctrl.token,

@@ -13,7 +13,8 @@ String.prototype.toBytes = function() {
 };
 
 function charCodeLatina(doc){
-  doc.push(0x1B, 0x52, 0x12);
+//  doc.push(0x1B, 0x52, 0x12);
+  doc.push(0x1B, 0x52, 12);
 //  doc.push(0x1d, 0xF9, 0x37, 0);
 //  doc.push(0x1B, 0x74, 6);
 }
@@ -83,6 +84,10 @@ function bold(doc, text) {
 
 function printUserConfig(doc) {
     doc.push(0x1D, 0xF9, 0x29, 0x30);
+}
+
+function printSuportedUnicodeSets(doc){
+  doc.push(0x1B, 0x5A)
 }
 
 function lineFeed(doc, length) {

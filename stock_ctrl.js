@@ -71,10 +71,11 @@ angular.module( 'vrerpsys' )
   stock_ctrl.get_products = function ( id ) {
     var get_products = function () {
       console.log('get_products');
+        console.log($scope.login_ctrl.username);
       $http.get(
         'http://' +
         $scope.login_ctrl.host +
-        '/api/stocks/',
+        '/api/stocks/?user__username=' + $scope.login_ctrl.username,
         {
           'headers': {
             'Authorization':'Token ' +  $scope.login_ctrl.token,

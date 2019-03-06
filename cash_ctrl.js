@@ -57,7 +57,9 @@ angular.module( 'vrerpsys' )
   cash_ctrl.createSalePrint = function(){
     var salePrint = [];
 //    printUserConfig(salePrint);
+    printSuportedUnicodeSets(salePrint);
     charCodeLatina(salePrint);
+    printSuportedUnicodeSets(salePrint);
     setPrinterLanguage(salePrint, 1);
 //    printUserConfig(salePrint);
     bold(salePrint, printHeader);
@@ -197,7 +199,9 @@ angular.module( 'vrerpsys' )
     var get_clients = function () {
       console.log('get_clients');
       $http.get(
-        'http://' + $scope.login_ctrl.host + '/api/clients/',
+        'http://' + 
+        $scope.login_ctrl.host + 
+        '/api/clients/',
         cash_ctrl.headers
       ).then(
         function ( response ) {
