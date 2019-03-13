@@ -1,53 +1,325 @@
-<section id="cash-view" >
+<section id="cash-view">
   <div class="container">
 
-    <div class="bar-title">
-      <h1>Caixa</h1>
+    <div class="bar-title row">
+        <div class="col-xs-1">
+             <h1>Caixa</h1> 
+        </div>
+        <div class="col-xs-1">
+            <i class="fas fa-chart-area fa-3x" ng-click="cash_ctrl.show_resume_cash()" style="margin-top: 0.5em;margin-left:1px "></i>
+        </div>  
+        <div class="col-xs-1">
+            <i class="fas fa-exchange-alt fa-3x" ng-click="cash_ctrl.show_exchange_view()" style="margin-top: 0.5em;margin-left:1px "></i>
+        </div>
+				<div class="col-xs-1">
+            <i class="fas fa-th-list fa-3x" ng-click="cash_ctrl.show_sales_view()" style="margin-top: 0.5em;margin-left:1px "></i>
+        </div>
+    </div>
 
+    <div class="row">
+      <div class="col-xs-7">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <i class="fas fa-user-tag"></i>
+                <b>Vendedor(a)</b>
+              </div>
+              <div class="panel-body">
+                <ui-select ng-model="cash_ctrl.sell.saleswoman" theme="bootstrap" style="width: 100%">
+                  <ui-select-match>
+                    <span>{{ $select.selected.name }}</span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="seller.id as seller in (cash_ctrl.employees | filter: $select.search) track by seller.name">
+                    <span>{{ seller.name }}</span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <i class="fas fa-user"></i>
+                <b>Cliente</b>
+              </div>
+              <div class="panel-body">
+                <ui-select ng-model="cash_ctrl.sell.client" theme="bootstrap" style="width: 100%">
+                  <ui-select-match>
+                    <span>{{ $select.selected.name }}</span>
+                  </ui-select-match>
+                  <ui-select-choices repeat="client.id as client in (cash_ctrl.clients | filter: $select.search) track by client.name">
+                    <span>{{ client.name }}</span>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <i class="fas fa-shopping-cart"></i>
+                <b>Produtos</b>
+              </div>
+              <div class="panel-body form-inline">
+                <div class="form-group">
+                  <label for="product">Produto</label>
+                  <ui-select ng-model="cash_ctrl.newProduct.product" theme="bootstrap" style="width: 300px">
+                    <ui-select-match>
+                      <span>{{ $select.selected.code}} - {{ $select.selected.description}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="product in (cash_ctrl.products | filter: $select.search) track by product.code">
+                      <span>{{ product.code }} - {{ product.description }}</span>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div class="form-group">
+                  <label for="amount">Quantidade</label>
+                  <input type="number" class="form-control amount" ng-model="cash_ctrl.newProduct.amount">
+                </div>
+                <button type="submit" class="btn btn-info" ng-click="cash_ctrl.addProduct(cash_ctrl.item)">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+              <table id="products" class="table-striped table-hover table table-condensed">
+                <thead>
+                  <tr>
+                    <th>Qtd</th>
+                    <th>Produto</th>
+                    <th>Unitário</th>
+                    <th>Total</th>
+                    <th>Excluir</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="item in sell_products track by item.id">
+                    <td>{{ item.amount }}</td>
+                    <td ng-repeat="product in cash_ctrl.products" ng-if="item.product == product.id">
+                        {{ product.description }}</td>
+                    <td ng-repeat="product in cash_ctrl.products" ng-if="item.product == product.id">
+                      {{ product.products[0].value | currency:"R$" }}
+                    </td>
+                    <td ng-repeat="product in cash_ctrl.products" ng-if="item.product == product.id">
+                      {{ product.products[0].value * item.amount | currency:"R$" }}
+                    </td>
+                    <td>
+                        <i class="fa fa-trash" ng-click="sell_products.splice($index, 1)"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="panel-footer text-right">
+                <span>
+                  <b>Desconto:</b>
+                  <input type="number" ng-model="cash_ctrl.sell.deduction" ng-change="onDeductionChange()" min="0" step="0.01">
+                </span>
+                <span><b>Total:</b> {{ cash_ctrl.subTotalProducts | currency:"R$" }} </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-5">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <i class="fas fa-credit-card"></i>
+            <b>Formas da pagamento</b>
+          </div>
+          <div class="panel-body form-inline">
+            <div class="form-group">
+              <label for="product">Forma</label>
+              <ui-select ng-model="cash_ctrl.newPayment.mode" theme="bootstrap" style="width: 200px">
+                <ui-select-match>
+                  <span>{{ $select.selected.description}}</span>
+                </ui-select-match>
+                <ui-select-choices repeat="paymentMode.mode as paymentMode in (cash_ctrl.paymentModes | filter: $select.search) track by paymentMode.description">
+                  <span>{{ paymentMode.description }}</span>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="form-group">
+              <label for="quantity">Valor</label>
+              <input type="number" ng-model="cash_ctrl.newPayment.value" class="form-control amount" min="0" step="0.01">
+            </div>
+            <button 
+              type="submit"
+              ng-keypress="($event.charCode==13)? cash_ctrl.addPayment() : return"
+              class="btn btn-info"
+              ng-click="cash_ctrl.addPayment()">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <table class="table table-striped table-hover table-condensed">
+            <thead>
+              <tr>
+                <th>Forma</th>
+                <th>Parcelas</th>
+                <th>Valor</th>
+                <th>Excluir</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in sell_payments track by item.id">
+                <td ng-repeat="paymentMode in cash_ctrl.paymentModes" ng-if="item.mode == paymentMode.mode">
+                  {{ paymentMode.description }}
+                </td>
+                <td>{{ item.plots_amount }}</td>
+                <td>{{ item.value | currency:"R$" }}</td>
+                <td
+                  ng-click="sell_payments.splice($index, 1)">
+                  <i class="fa fa-trash danger"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <i class="fa fa-dollar-sign"></i>
+            <b>Total</b>
+          </div>
+          <table id="collapseTable" class="table table-condensed">
+            <tr>
+              <td>SUBTOTAL:</td>
+              <td class="text-right">{{ cash_ctrl.subTotalProducts | currency:"R$" }}</td>
+            </tr>
+            <tr>
+              <td>DESCONTOS:</td>
+              <td class="text-right">{{ cash_ctrl.deduction_value | currency:"R$" }}</td>
+            </tr>
+            <tr>
+              <td>PAGAMENTOS:</td>
+              <td class="text-right">{{ cash_ctrl.payment_total | currency:"R$" }}</td>
+            </tr>
+            <tr>
+              <td>TROCO:</td>
+              <td class="text-right">{{ cash_ctrl.money_change | currency:"R$" }}</td>
+            </tr>
+            <tr>
+              <td>FALTANDO:</td>
+              <td class="text-right">{{ cash_ctrl.money_missing | currency:"R$" }}</td>
+            </tr>
+            <tr>
+              <td>TOTAL A PAGAR:</td>
+              <td class="text-right">{{ cash_ctrl.total_pay | currency:"R$" }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
-    
-    <div>
-      <redt_select
-        config="cash_ctrl.select_config"
-        ng-model="cash_ctrl.products"
-      ></redt_select>
+    <div class="row">
+      <div class="col-xs-12 text-right">
+        <button class="btn btn-success" ng-click="cash_ctrl.submit()">
+          <i class="fa fa-check"></i>
+          <span>Finalizar</span>
+        </button>
+        <button class="btn btn-danger" ng-click="sendPrint()">
+          <i class="fa fa-times"></i>
+          <span>Cancelar</span>
+        </button>
+      </div>
     </div>
-
-    <div class="">
-      <table
-        class="row-border hover"
-        cellpadding="0"
-        cellspacing="0"
-        border="0"
-      >
-        <thead>
-        <tr>
-          <th>Código</th>
-          <th>Descrição</th>
-          <th>Tamanho</th>
-          <th>Preço</th>
-          <th>Qtd</th>
-          <th> + </th>
-          <th> - </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr
-          ng-repeat="product in cash_ctrl.products track by $index"
-        >
-          <td>{{ product.code }}</td>
-          <td>{{ product.description }}</td>
-          <td>{{ product.size }}</td>
-          <td>{{ product.products[0].value }}</td>
-          <td> - </td>
-        </tr>
-        <!--</div>-->
-        </tbody>
-      </table>
-    </div>
-    <!-- /.scroll-wrapper -->
 
   </div>
-  
-  
+
+
 </section>
+
+<div class="modal fade" id="plotsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Parcelamento</h4>
+        <div>
+            <label for="parcel_length">Parcelas:</label>    
+            <input id="parcel_length" type="number" ng-change="onParcelChange()" ng-model="cash_ctrl.parcel_length">
+            <label> Valor total: {{ cash_ctrl.newPayment.value | currency: "R$" }} </label>
+        </div>
+      </div>
+      <div class="modal-body">
+        <label> Adicionar manualmente: </label>
+        <button
+          type="button"
+          ng-keypress="($event.charCode==13)? cash_ctrl.addPlot() : return"
+          class="btn btn-info"
+          ng-click="cash_ctrl.addPlot()">
+          <i class="fa fa-plus"></i>
+        </button>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Parcela</th>
+              <th>Data</th>
+              <th>Valor</th>
+              <th>Opções</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="plot in cash_ctrl.newPayment.plots track by plot.plot">
+              <td>{{ plot.plot }}</td>
+              <td><input class="form-control" type="date" ng-model="plot.date"></td>
+              <td><input class="form-control" type="number" step="0.01" ng-model="plot.ploted_value"></td>
+              <td
+                  class="text-center"
+                  ng-click="cash_ctrl.newPayment.plots.splice($index, 1)">
+                  <i class="fa fa-trash danger"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" >Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="resumeModal" tabindex="-1" role="dialog" aria-labelledby="resumeModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="resumeModalLabel">Resumo de vendas</h4>
+        
+      </div>
+      <div class="modal-body">
+<!--        <label> Adicionar manualmente: </label>-->
+          <table class="table">
+         
+          <tbody>
+            <tr>
+              <td>Total Dinheiro</td>
+              <td>{{ cash_ctrl.total_money | currency: "R$" }}</td>
+            </tr>
+            <tr>
+              <td>Total Ch. à Vista</td>
+              <td>{{ cash_ctrl.total_chv | currency: "R$" }}</td>
+            </tr>
+            <tr>
+              <td>Total Ch. Pré</td>
+              <td>{{ cash_ctrl.total_chp | currency: "R$"}}</td>
+            </tr>
+            <tr>
+              <td>Total C. Crédito</td>
+              <td>{{ cash_ctrl.total_cc | currency: "R$" }}</td>
+            </tr>
+            <tr>
+              <td>Total C. Débito</td>
+              <td>{{ cash_ctrl.total_cd | currency: "R$" }}</td>
+            </tr>
+            <tr>
+              <td>Total Geral</td>
+              <td>{{ cash_ctrl.total_resume | currency: "R$" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" >Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>

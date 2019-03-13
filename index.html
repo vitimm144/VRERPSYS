@@ -12,8 +12,12 @@
     <link rel="stylesheet" href="assets/fonts/roboto.css">
     <!-- bootstrap base -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- font fontawesome -->
+    <link rel="stylesheet" href="bower_components/font-awesome/css/all.min.css">
     <!-- mCustomScrollbar -->
     <link rel="stylesheet" href="assets/css/jquery.mCustomScrollbar.css">
+    <!-- ui select -->
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.min.css">
     <!-- style -->
     <link rel="stylesheet" href="assets/css/style.css">
   </head>
@@ -32,6 +36,7 @@
       src="bower_components/datatables.net/js/jquery.dataTables.min.js"
     ></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
     <script
       src="bower_components/angular-datatables/dist/angular-datatables.min.js"
     ></script>
@@ -45,6 +50,7 @@
     <script
       src="bower_components/ng-scrollbars/dist/scrollbars.min.js"
     ></script>
+    <script src="bower_components/angular-ui-select/dist/select.min.js"></script>
     <script>
       const electron = require( 'electron' );
       const storage = require('electron-json-storage');
@@ -52,7 +58,8 @@
       const path = require( 'path' );
       const url = require( 'url' );
       const ipcRenderer = electron.ipcRenderer;
-      const notifier = require( 
+			const log = require('simple-node-logger').createSimpleLogger('vrerpsys.log');
+      const notifier = require(
         path.join( __dirname, 'electron-notifications' )
       );
       const package = require('./package.json');
@@ -101,7 +108,9 @@
         }
       };
     </script>
+    <script src="printer_utils.js"></script>
     <script src="app.js"></script>
+    <script src="custom_select.js"></script>
     <script src="login_ctrl.js"></script>
     <script src="contacts_ctrl.js"></script>
     <script src="contact_edit_ctrl.js"></script>
@@ -109,7 +118,8 @@
     <script src="change_password.js"></script>
     <script src="stock_ctrl.js"></script>
     <script src="cash_ctrl.js"></script>
-    <script src="custom_select.js"></script>
+    <script src="stock_transfer.js"></script>
+    <script src="sales_ctrl.js"></script>
 
     <div id="frame">
       <!-- Window Bar -->
@@ -156,6 +166,7 @@
         <div ui-view="form" ng-cloak></div>
         <div ui-view="stock" ng-cloak></div>
         <div ui-view="cash" ng-cloak></div>
+        <div ui-view="sales" ng-cloak></div>
       </div>
     </div>
 

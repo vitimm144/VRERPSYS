@@ -3,7 +3,8 @@ angular.module(
   [
     'ui.router',
     'datatables',
-    'ngScrollbars'
+    'ngScrollbars',
+    'ui.select'
   ]
 )
 .config(
@@ -62,6 +63,30 @@ angular.module(
             'templateUrl': 'stock.html',
             'controller': 'StockCtrl',
             'controllerAs': 'stock_ctrl'
+          }
+        }
+      }
+    ).state(
+      {
+        'name': 'contacts.transfer',
+        'url': '/stock/transfer/:stockId',
+        'views': {
+          'form@': {
+            'templateUrl': 'stock_transfer.html',
+            'controller': 'StockTransferCtrl',
+            'controllerAs': 'stock_transfer_ctrl'
+          }
+        }
+      }
+    ).state(
+      {
+        'name': 'contacts.sales',
+        'url': '/sales',
+        'views': {
+          'sales@': {
+            'templateUrl': 'sales.html',
+            'controller': 'SalesCtrl',
+            'controllerAs': 'sales_ctrl'
           }
         }
       }

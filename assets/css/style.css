@@ -179,7 +179,7 @@ html {
 #header-section .block-3 .btn-all { top: 42px; right: 326px; }
 #header-section .block-3 .btn-public { top: 42px; right: 263px; }
 #header-section .block-3 .btn-personal { top: 42px; right: 179px; }
-#header-section .block-3 .btn-addcontact { 
+#header-section .block-3 .btn-addcontact {
     position: absolute;
     top: 68px;
     right: 179px;
@@ -545,9 +545,16 @@ html {
 }
 #recent-calls .dataTables_wrapper .dataTables_filter { display: none; }
 
+/********* TELA DE ESTOQUE ********/
 #cash-view{
-  position: relative;
+  position: fixed;
   z-index: 900;
+  top: 140px;
+  overflow: auto;
+  left: 0;
+  background-color: #fff;
+  width: 100vw;
+  height: calc(100vh - 140px);
 }
 
 
@@ -605,6 +612,7 @@ html {
 #edit-section .form-top .form-line input::-webkit-input-placeholder { font-size: 10px !important; color: rgba(255,255,255,0.6); font-weight: 300; }
 #edit-section .form-top .form-line input.input-full {}
 #edit-section .form-top .input-phone-area { width: 58px; display: inline-block; text-align: center; margin-right: 2px; }
+#edit-section .form-top .input-amount { width: 58px; display: inline-block; text-align: center; margin-right: 2px; }
 #edit-section .form-top .input-phone-ddd { width: 58px; display: inline-block; text-align: center; margin-right: 2px; padding: 0 2px; }
 #edit-section .form-top .input-phone-number { width: 133px; display: inline-block;}
 #edit-section .form-top .btn-update {
@@ -726,11 +734,68 @@ html {
     margin-right: 12px;
 }
 
+#cash-view .form-control,
+#cash-view .panel,
+#cash-view .list-group,
+#cash-view .btn,
+.modal-content,
+.modal-content .btn {
+    border-radius: 0;
+    box-shadow : none;
+}
 
 
+#cash-view .form-control[readonly] {
+    background-color: #fff;
+}
 
+.ui-select-container {
+    vertical-align: middle;
+    display: inline-block;
+}
 
+.ui-select-container .form-control {
+    width: 100%;
+}
 
+.amount[type=number]{
+    width: 7em;
+}
+
+/*** Tabela de produtos com overflow no tbody ***/
+/*#products tbody {
+    display: block;
+    max-height: 10em;
+    overflow: auto;
+}
+
+#products thead,
+#products tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}*/
+
+/*#products td:nth-child(1) {
+    width: 10%;
+}
+
+#products td:nth-child(2) {
+    width: 30%;
+}
+
+#products td:nth-child(3),
+#products td:nth-child(4) {
+    width: 20%;
+}
+
+#products td:nth-child(5) {
+    width: 10%;
+}*/
+
+#products thead {
+    width: calc( 100% - 1em );
+}
 
 /**************** RESPONSIVIDADE *******************/
 

@@ -13,6 +13,7 @@ angular.module( 'vrerpsys' )
   contact_edit_ctrl.contact_edit_form = {};
 
   console.log('ContactEditCtrl')
+  log.info('#ContactEditCtrl#')
 
   $scope.$on('$stateChangeSuccess', function(
     event,
@@ -54,9 +55,11 @@ angular.module( 'vrerpsys' )
       ).then(
         function ( response ) {
           console.log( 'Contact get OK', response )
+//          log.info( 'Contact get OK', response )
           contact_edit_ctrl.contact = response.data;
         }, function ( response ) {
           console.log( 'Contact get FAIL', response )
+//          log.info( 'Contact get FAIL', response )
           if ( response.status == 401 ) {
             $scope.login_ctrl.logout();
           }
@@ -115,10 +118,12 @@ angular.module( 'vrerpsys' )
           ).then(
             function ( response ) {
               console.log( 'Contact put OK', response )
+              log.info( '#ContactEditCtrl# Contact put OK', response )
               $rootScope.$broadcast( 'Contact_refresh' );
               $state.go( '^' );
             }, function ( response ) {
               console.log( 'Contact put FAIL', response )
+              log.info( '#ContactEditCtrl# Contact put FAIL', response )
               if ( response.status == 401 ) {
                 $scope.login_ctrl.logout();
               } else if ( response.status == 400 ) {
@@ -142,10 +147,12 @@ angular.module( 'vrerpsys' )
           ).then(
             function ( response ) {
               console.log( 'Contact post OK', response )
+              log.info( '#ContactEditCtrl# Contact post OK', response )
               $rootScope.$broadcast( 'Contact_refresh' );
               $state.go( '^' );
             }, function ( response ) {
               console.log( 'Contact post FAIL', response )
+              log.info( '#ContactEditCtrl# Contact post FAIL', response )
               if ( response.status == 401 ) {
                 $scope.login_ctrl.logout();
               } else if ( response.status == 400 ) {

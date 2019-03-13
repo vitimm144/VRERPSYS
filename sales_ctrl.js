@@ -1,5 +1,5 @@
 angular.module( 'vrerpsys' )
-.controller( 'StockCtrl', function (
+.controller( 'SalesCtrl', function (
   $state,
   $interval,
   $scope,
@@ -10,10 +10,10 @@ angular.module( 'vrerpsys' )
   DTOptionsBuilder,
   DTColumnDefBuilder
 ) {
-  var stock_ctrl = this;
+  var sales_ctrl = this;
 
-  stock_ctrl.dtInstance = {};
-  stock_ctrl.dtOptions = DTOptionsBuilder.newOptions().withPaginationType(
+  sales_ctrl.dtInstance = {};
+  sales_ctrl.dtOptions = DTOptionsBuilder.newOptions().withPaginationType(
     'full_numbers'
   ).withDisplayLength( 20 ).withLanguage(
     {
@@ -44,7 +44,7 @@ angular.module( 'vrerpsys' )
     true
   ).withOption( 'paging', true ).withOption('order', []);
 
-  stock_ctrl.dtColumnDefs = [
+  sales_ctrl.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef( 0 ).notSortable(),
     DTColumnDefBuilder.newColumnDef( 1 ).notSortable(),
     DTColumnDefBuilder.newColumnDef( 2 ).notSortable(),
@@ -52,9 +52,9 @@ angular.module( 'vrerpsys' )
     DTColumnDefBuilder.newColumnDef( 4 ).notSortable()
   ];
 
-  stock_ctrl.stock_form = {};
+  sales_ctrl.sales_form = {};
 
-  console.log('StockCtrl')
+  console.log('SalesCtrl')
 
   $scope.$on('$stateChangeSuccess', function(
     event,
@@ -65,17 +65,21 @@ angular.module( 'vrerpsys' )
   ){
     event.preventDefault();
     console.log('current_state',$state.current);
-    stock_ctrl.current_state = $state.current;
+    sales_ctrl.current_state = $state.current;
   });
+  
+  sales_ctrl.status = {
+    "F":"Finalizada",
+    "C":"Cancelada"
+  }
 
-  stock_ctrl.get_products = function ( id ) {
-    var get_products = function () {
-      console.log('get_products');
-        console.log($scope.login_ctrl.username);
+  sales_ctrl.get_sales = function ( id ) {
+    var get_sales = function () {
+      console.log('get_sales');
       $http.get(
         'http://' +
         $scope.login_ctrl.host +
-        '/api/stocks/?user__username=' + $scope.login_ctrl.username,
+        '/api/sales/?user__username=' + $scope.login_ctrl.username,
         {
           'headers': {
             'Authorization':'Token ' +  $scope.login_ctrl.token,
@@ -86,11 +90,11 @@ angular.module( 'vrerpsys' )
         }
       ).then(
         function ( response ) {
-          console.log( 'Products get OK', response )
-          $scope.login_ctrl.has_missed_products = false;
-          stock_ctrl.products = response.data.results;
+          console.log( 'Sales get OK', response )
+          $scope.login_ctrl.has_missed_sales = false;
+          sales_ctrl.sales = response.data.results;
         }, function ( response ) {
-          console.log( 'Products get FAIL', response )
+          console.log( 'Sales get FAIL', response )
           if ( response.status == 401 ) {
             $scope.login_ctrl.logout();
           }
@@ -102,7 +106,7 @@ angular.module( 'vrerpsys' )
       function ( response ) {
         console.log( 'ctrl_has', response )
         if ( response[ 1 ] ) {
-          get_products();
+          get_sales();
         }
       },
       function ( response ) {
@@ -111,13 +115,13 @@ angular.module( 'vrerpsys' )
     );
   };
 
-  stock_ctrl.go_back = function () {
-    $state.go( '^' );
+  sales_ctrl.go_back = function () {
+    $state.go( 'contacts.cash' );
   };
-  stock_ctrl.transfer = function ( id ) {
+  sales_ctrl.transfer = function ( id ) {
     console.log('transfer');
-    $state.go( 'contacts.transfer', { 'stockId': id } );
+//    $state.go( 'contacts.cash', { 'salesId': id } );
   };
 
-  stock_ctrl.get_products();
+  sales_ctrl.get_sales();
 });

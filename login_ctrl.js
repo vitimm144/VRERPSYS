@@ -6,6 +6,7 @@ angular.module( 'vrerpsys' )
   $http,
   $timeout
 ) {
+  
   var login_ctrl = this;
 
   login_ctrl.login_form = {};
@@ -80,11 +81,14 @@ angular.module( 'vrerpsys' )
           ],
           function( error, data ) {
             if ( error ) {
-              console.log( 'Erro storage login', error )
+              console.log( 'Erro storage login', error );
+              log.error('Error storage login ', error);
               reject('Erro get_all_storage');
             } else {
               console.log('get all storage success');
               console.log(data);
+              log.info('get all storage success');
+              log.info(data);
               if ( data.username.value ) {
                 login_ctrl.username = data.username.value;
               }
@@ -123,6 +127,8 @@ angular.module( 'vrerpsys' )
   ){
     event.preventDefault();
     console.log('current_state',$state.current);
+    log.info('current_state',$state.current);
+    
     login_ctrl.current_state_name = $state.current.name;
   });
 
@@ -140,6 +146,7 @@ angular.module( 'vrerpsys' )
 
   login_ctrl.login = function () {
     console.log('Login')
+    log.info('Login')
     if ( login_ctrl.login_form.$valid ) {
       $http.post(
         'http://' + login_ctrl.host + '/api/auth/token/',
@@ -147,6 +154,7 @@ angular.module( 'vrerpsys' )
       ).then(
         function ( response ) {
           console.log( 'Login post OK', response )
+          log.info( 'Login post OK', response )
 
 //          login_ctrl.email = response.data.email;
 //          login_ctrl.name = response.data.name;
@@ -175,6 +183,7 @@ angular.module( 'vrerpsys' )
           login_ctrl.password = null;
         }, function ( response ) {
           console.log( 'Login post FAIL', response )
+          log.error( 'Login post FAIL', response )
           if ( response.status == 400 ) {
             if ( response.data.info == 'wrong password!' ) {
               add_error( 'Usuário e/ou senha incorreto(s)!' );
@@ -234,17 +243,20 @@ angular.module( 'vrerpsys' )
   };
 
   login_ctrl.show_stock_view = function () {
-            console.log('GO to stock');
+    log.info('Navigated to stock');
+    console.log('GO to stock');
     login_ctrl.public_filter_class = 'stock';
     $state.go( 'contacts.stock' );
   };
   login_ctrl.show_cash_view = function () {
-            console.log('GO to cash');
+    console.log('Navigated to cash');
+    log.info('Navigated to cash');
     login_ctrl.public_filter_class = 'cash';
     $state.go( 'contacts.cash' );
   };
   login_ctrl.show_contacts_view = function () {
-            console.log('GO to contacts');
+    log.info('Navigated to contacts');
+    console.log('GO to contacts');
     login_ctrl.public_filter_class = 'contacts';
     $state.go( 'contacts' );
   };
@@ -262,6 +274,7 @@ angular.module( 'vrerpsys' )
   var clear_update_status = null;
   ipcRenderer.on( 'update-status', function (evt, param) {
     console.log('update status', evt, param);
+    log.info('update status', evt, param)
     login_ctrl.update_status = param;
     if ( clear_update_status ) {
       $timeout.cancel( clear_update_status )

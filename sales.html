@@ -1,0 +1,58 @@
+<section id="recent-calls" class="show table-section">
+  <div class="container">
+
+    <div class="bar-title">
+      <h1>Vendas</h1>
+<!--      <button
+        class="btn"
+        ng-click="sales_ctrl.go_back()"
+      >Contatos</button>-->
+    </div>
+
+    <div class="scroll-wrapper call">
+      <table
+        datatable="ng"
+        dt-instance="sales_ctrl.dtInstance"
+        dt-options="sales_ctrl.dtOptions"
+        dt-column-defs="sales_ctrl.dtColumnDefs"
+        class="row-border hover"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+      >
+        <thead>
+        <tr>
+          <th>Loja</th>
+					<th>vendedora</th>
+					<th>Total</th>
+					<th>status</th>
+          <th>Opções</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          ng-repeat="sale in sales_ctrl.sales track by $index"
+        >
+          <td>{{ sale.user_str}}</td>
+					<td>{{ sale.saleswoman_str}}</td>
+					<td>{{ sale.total}}</td>
+					<td>{{ sales_ctrl.status[sale.status]}}</td>
+          <td>
+            <button
+              type="button"
+              class="btn-danger"
+              ng-click="sales_ctrl.go_back()">
+              
+             Voltar </button>
+          </td>
+        </tr>
+        <!--</div>-->
+        </tbody>
+      </table>
+    </div>
+    <!-- /.scroll-wrapper -->
+
+  </div>
+  <!-- /.container -->
+</section>
+<!-- /#recent-calls-section  -->
