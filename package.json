@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "bower": "1.8.0",
-    "electron": "^1.6.18",
+    "electron": "^9.1.0",
     "electron-builder": "^17.10.0",
     "electron-packager": "^8.6.0",
     "electron-rebuild": "^1.8.4"
